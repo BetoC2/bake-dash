@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import "./styles/layout.scss";
 import { HiMenuAlt2, HiUser } from "react-icons/hi";
-import { RiDashboardFill} from "react-icons/ri";
+import { RiDashboardFill } from "react-icons/ri";
 
-function DashboardLayout({ children }) {
+function DashboardLayout({ children }) { 
+  //Responsive openning
   const [isMobile, setIsMobile] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -27,13 +28,20 @@ function DashboardLayout({ children }) {
   const mobileMenuClasses = `mobile-menu fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center transition-opacity duration-300 ${isMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
     }`;
 
+  //Dashboard
+  //Openning
+  const [isDashboardOpen, setIsDashboardOpen] = useState(true);
+
+  //Menus
+  const Menus = [
+    {title:"Dashboard", src:"#"},
+    {title:"Produtos", src:"#"},
+    {title:"Usuarios", src:"#"}
+  ]
+
   return (
 
     <div className="layout-content">
-      <header className="fixed flex justify-between items-center w-full text-xl p-5 pt-8">
-        <a href="#" className="absolute pt-2">
-          <img src="#" alt="" className="w-36" />
-        </a>
         {isMobile ? (
           <button
             type="button"
@@ -43,22 +51,29 @@ function DashboardLayout({ children }) {
             <HiMenuAlt2 className="text-3xl" />
           </button>
         ) : (
-          <nav className="flex-grow flex justify-center">
-            <a href="#" className="mx-4">
-              Dashboard
-            </a>
-            <a href="#products" className="mx-4">
-              Productos
-            </a>
-            <a href="#users" className="mx-4">
-              Usuarios
-            </a>
-            {/* <a href="#" className="mx-4">
-              Almacén
-            </a> */}
-          </nav>
+          //DESKOPT
+          <div className="flex">
+            <div className={` ${isDashboardOpen ? 'w-72' : 'w-20'} h-screen bg-purple-400 relative duration-300 p-5 pt-8`}>
+              <HiMenuAlt2 onClick={() => setIsDashboardOpen(!isDashboardOpen)} className={`text-2xl  absolute cursor-pointer -right-3 top-9 w-7 border-2 border-purple rounded-full`}/>
+              <div className="flex gap-x-4 items center">
+                <HiMenuAlt2 className={`cursor-pointer duration-500`}/>
+                <h1 className={`${!isDashboardOpen && "scale-0"} text-white origin-left font-medium duration-300`}>Designer</h1>
+              </div>
+              <ul className="pt-6">
+                {Menus.map((menu, index) => (
+                  <li key={index} className="text-gray-300 text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-orange-800 rounded-md">
+                    <HiMenuAlt2 className={`text-xl cursor-pointer duration-500`}/>
+                    <span className={`${!isDashboardOpen && 'hidden'} origin-left duration-200`} >{menu.title}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="p-7 text-2xl font-semibold flex-1 h-screen">
+              <h1>Home Page</h1>
+            </div>
+          </div>
+
         )}
-      </header>
 
       {isMobile && (
         <div className={mobileMenuClasses}>
@@ -92,7 +107,7 @@ function DashboardLayout({ children }) {
           </ul>
         </div>
       )}
-      <h1>Layout</h1>
+
       <main>{children}</main>
 
       <footer>{/* Contenido del pie de página si es necesario */}</footer>

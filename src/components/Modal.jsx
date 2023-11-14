@@ -1,7 +1,7 @@
-import React from 'react';
-import { ImCross } from 'react-icons/im';
-import styled from 'styled-components';
-import './Modal.css';
+
+import React from "react";
+import { ImCross } from "react-icons/im";
+import "./styles/Modal.css";
 
 export default function Modal({
   children,
