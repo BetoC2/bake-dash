@@ -1,6 +1,7 @@
 
 import React from "react";
 import { ImCross } from "react-icons/im";
+import styled from "styled-components";
 import "./styles/Modal.css";
 
 export default function Modal({
@@ -14,6 +15,7 @@ export default function Modal({
   // TODO: Manejar cuando es un dispositivo movil
 
   return (
+
     <>
       {modalState && (
         <Overlay>
