@@ -6,6 +6,7 @@ import { IoIosAddCircleOutline } from "react-icons/io";
 import { FaSearch } from "react-icons/fa";
 import { RiPencilFill } from "react-icons/ri";
 
+
 const data = [
   {
     id: "01",
@@ -52,6 +53,14 @@ const data = [
 ];
 
 export default function Users() {
+  //Set current page
+  const [currentPage, setCurrentPage] = useState("Usuarios");
+
+  useEffect(() => {
+    setCurrentPage("Usuarios");
+  }, []);
+
+
   // Responsive openning
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
@@ -84,7 +93,7 @@ export default function Users() {
         setIsMobile={setIsMobile}
         title="Agregar nuevo usuario"
       ></Modal>
-      <DashboardLayout isMobile={isMobile} setIsMobile={setIsMobile}>
+      <DashboardLayout isMobile={isMobile} setIsMobile={setIsMobile} currentPage={currentPage}>
         <div className="flex flex-col h-[100%] p-2">
           <ToolsSection>
             <UserButton onClick={() => setModalState(!modalState)}>

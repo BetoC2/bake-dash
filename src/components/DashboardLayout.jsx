@@ -5,8 +5,7 @@ import { RiDashboardFill } from "react-icons/ri";
 import { BsArrowRightSquareFill } from "react-icons/bs";
 import bakeryLogo from "../assets/img/bmagallanes_logo.png"
 
-function DashboardLayout({ children }) {
-
+function DashboardLayout({ children, currentPage }) {
 
   //Responsive openning
   const [isMobile, setIsMobile] = useState(false);
@@ -38,9 +37,9 @@ function DashboardLayout({ children }) {
 
   //Menus
   const Menus = [
-    { title: "Dashboard", icon: <RiDashboardFill className={`text-3xl cursor-pointer duration-500`} /> },
-    { title: "Produtos", icon: <HiMenuAlt2 className={`text-3xl cursor-pointer duration-500`} /> },
-    { title: "Usuarios", icon: <HiUser className={`text-3xl cursor-pointer duration-500`} /> }
+    { title: "Dashboard", href:"/" , icon: <RiDashboardFill className={`text-3xl cursor-pointer duration-500`}/> },
+    { title: "Productos", href:"/products", icon: <HiMenuAlt2 className={`text-3xl cursor-pointer duration-500`} /> },
+    { title: "Usuarios", href:"/users", icon: <HiUser className={`text-3xl cursor-pointer duration-500`} /> }
   ]
 
 
@@ -71,7 +70,7 @@ function DashboardLayout({ children }) {
             </div>
             <ul className="pt-6">
               {Menus.map((menu, index) => (
-                <li key={index} className="text-sm flex items-center gap-x-4 cursor-pointer p-2 pl-8 pr-8 hover:bg-main-dark hover:text-main-white rounded-md">
+                <li key={index} className={`${currentPage === menu.title ? 'bg-main-dark text-main-white' : ''} text-sm flex items-center gap-x-4 cursor-pointer p-2 pl-8 pr-8 hover:bg-main-dark hover:text-main-white rounded-md`}>
                   {menu.icon}
                   <span className={`${!isDashboardOpen && 'hidden'} origin-left duration-200 text-2xl`} >{menu.title}</span>
                 </li>
@@ -99,19 +98,19 @@ function DashboardLayout({ children }) {
           <ul className="mobile-menu text-white mt-14 ml-4 absolute left-0 top-0 p-5">
             <li className="mb-4 flex items-center">
               <RiDashboardFill className="mr-2" />
-              <a href="#" onClick={toggleMenu}>
+              <a href="/" onClick={toggleMenu}>
                 Dashboard
               </a>
             </li>
             <li className="mb-4 flex items-center">
               <HiMenuAlt2 className="mr-2" />
-              <a href="#" onClick={toggleMenu}>
+              <a href="/products" onClick={toggleMenu}>
                 Productos
               </a>
             </li>
             <li className="mb-4 flex items-center">
               <HiUser className="mr-2" />
-              <a href="#" onClick={toggleMenu}>
+              <a href="/users" onClick={toggleMenu}>
                 Usuarios
               </a>
             </li>

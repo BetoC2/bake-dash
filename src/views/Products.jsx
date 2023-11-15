@@ -1,12 +1,24 @@
+<<<<<<< HEAD
 import React from "react";
 import { FaPlus, FaSearch } from "react-icons/fa";
+=======
+import React, { useEffect, useState } from "react";
+import { FaPlus, FaSearch } from 'react-icons/fa';
+>>>>>>> 4269835 (products an dahsboard functionality update)
 import { DashboardLayout } from "../components";
 import { CiCirclePlus } from "react-icons/ci";
 import testImg from "../assets/img/products/product1.jpg";
 
 function Products() {
+  const [currentPage, setCurrentPage] = useState("Productos");
+
+  useEffect(() => {
+    setCurrentPage("Productos");
+  }, []);
+
+
   return (
-    <DashboardLayout>
+    <DashboardLayout currentPage={currentPage}>
       <div className="mb-8 flex flex-col items-center justify-center">
         <button className="flex items-center bg-main-green py-8 px-12 rounded-2xl mb-8">
           <FaPlus className="mr-2 text-2xl" />
