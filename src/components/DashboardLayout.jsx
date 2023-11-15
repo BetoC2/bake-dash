@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import "./styles/layout.scss";
 import { HiMenuAlt2, HiUser } from "react-icons/hi";
 import { RiDashboardFill } from "react-icons/ri";
@@ -70,10 +71,10 @@ function DashboardLayout({ children, currentPage }) {
             </div>
             <ul className="pt-6">
               {Menus.map((menu, index) => (
-                <li key={index} className={`${currentPage === menu.title ? 'bg-main-dark text-main-white' : ''} text-sm flex items-center gap-x-4 cursor-pointer p-2 pl-8 pr-8 hover:bg-main-dark hover:text-main-white rounded-md`}>
+                <Link key={index} to={menu.href} className={`text-sm flex items-center gap-x-4 cursor-pointer p-2 pl-8 pr-8 hover:bg-main-dark hover:text-main-white rounded-md ${currentPage === menu.title ? 'bg-main-dark text-main-white' : ''}`}>
                   {menu.icon}
                   <span className={`${!isDashboardOpen && 'hidden'} origin-left duration-200 text-2xl`} >{menu.title}</span>
-                </li>
+                </Link>
               ))}
             </ul>
           </div>
