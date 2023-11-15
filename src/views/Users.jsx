@@ -93,13 +93,17 @@ export default function Users() {
             </UserButton>{" "}
             <br />
             <SearchBar>
-              <input
-                className="w-full p-1 rounded-md text-lg"
-                type="text"
-                placeholder="Busca usuarios por su nombre o ID"
-                onChange={handleSearch}
-              />{" "}
-              <FaSearch className="absolute right-2 top-2 text-gray-400" />
+              <div className="relative w-full">
+                <input
+                  type="text"
+                  placeholder="Buscar producto"
+                  className="p-2 pl-8 w-full rounded-3xl text-lg bg-main-white border-0"
+                  style={{ paddingLeft: "3rem" }}
+                />
+                <div className="absolute inset-y-0 left-2 pl-2 flex items-center pointer-events-none">
+                  <FaSearch className="text-xl" />
+                </div>
+              </div>
             </SearchBar>
           </ToolsSection>
           <UsersSection className="bg-white">

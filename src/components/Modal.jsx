@@ -8,7 +8,7 @@ export default function Modal({
   changeModalState,
   isMobile,
   setIsMobile,
-  width = "46%",
+  width = "46vw",
   title = "Modal",
 }) {
   // TODO: Manejar cuando es un dispositivo móvil
@@ -19,7 +19,7 @@ export default function Modal({
   `;
 
   const modalContainer = `
-    h-[97%] bg-white relative rounded-md shadow-md
+    h-[97vh] bg-white relative rounded-md shadow-md
     flex flex-col overflow-hidden
   `;
 
@@ -31,7 +31,7 @@ export default function Modal({
 
   const modalContent = `mx-auto flex-1 overflow-auto`;
 
-  const modalHeader = `sticky top-0 bg-white flex items-center justify-center p-4`;
+  const modalHeader = `mx-auto sticky top-0 bg-white flex items-center justify-center pt-6`;
 
   return (
     <>
@@ -39,7 +39,7 @@ export default function Modal({
         <div className={overlay}>
           <div
             className={`${modalContainer} ${
-              isMobile ? "w-[95%]" : "w-[" + width + "]"
+              isMobile ? "w-[95vw]" : "w-[" + width + "]"
             }`}
           >
             <div
