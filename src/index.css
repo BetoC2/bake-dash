@@ -22,7 +22,7 @@
 
   /*Estandar font, font-color & background-color*/
   font-family: outfit;
-  color-scheme: light dark;
+  color-scheme: light;
   color: var(--main-dark);
   background-color: var(--main-gray);
 

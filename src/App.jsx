@@ -2,8 +2,10 @@ import { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import {
   Home,
+  Login,
   Products,
   Users,
+  Error404,
   // NotFound,
   // Portfolio,
   // AboutUs,
@@ -19,8 +21,10 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/products" element={<Products />} />
         <Route path="/users" element={<Users />} />
+        <Route path="/404" element={<Error404 />} />
 
         {/* <Route path="/Portafolio" element={<Portfolio />} />
       <Route path="/AboutUs" element={<AboutUs />} />
