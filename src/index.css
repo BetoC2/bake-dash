@@ -2,10 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-/* @font-face {
-  font-family: bricolage-gt;
-  src:  url('./assets/fonts/BricolageGrotesque-var.ttf');
-} */
+@font-face {
+  font-family: montserrat;
+  src:  url('./assets/fonts/Montserrat-font.ttf');
+}
 
 
 :root {
@@ -20,7 +20,7 @@
 
 
   /*Estandar font, font-color & background-color*/
-  /* font-family: bricolage-gt; */
+  font-family: montserrat;
   color-scheme: light dark;
   color: var(--main-dark);
   background-color: var(--main-gray);

@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import{
-  Home
+  Home,
+  Products,
   // NotFound,
   // Portfolio,
   // AboutUs,
@@ -17,6 +18,7 @@ function App() {
     <BrowserRouter>
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/products" element={<Products />} />
       {/* <Route path="/Portafolio" element={<Portfolio />} />
       <Route path="/AboutUs" element={<AboutUs />} />
       <Route path="/LandingPages" element={<LandingPages />} />

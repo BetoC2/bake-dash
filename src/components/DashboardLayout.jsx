@@ -41,7 +41,6 @@ function DashboardLayout({ children }) {
     { title: "Dashboard", icon: <RiDashboardFill className={`text-3xl cursor-pointer duration-500`} /> },
     { title: "Produtos", icon: <HiMenuAlt2 className={`text-3xl cursor-pointer duration-500`} /> },
     { title: "Usuarios", icon: <HiUser className={`text-3xl cursor-pointer duration-500`} /> }
-
   ]
 
 
@@ -50,32 +49,38 @@ function DashboardLayout({ children }) {
 
     <div className="layout-content">
       {isMobile ? (
-        <button
-          type="button"
-          className="menu-button absolute right-0 top-0 p-5"
-          onClick={toggleMenu}
-        >
-          <HiMenuAlt2 className="text-3xl" />
-        </button>
+        <div>
+          <button
+            type="button"
+            className="menu-button absolute right-0 top-0 p-5"
+            onClick={toggleMenu}
+          >
+            <HiMenuAlt2 className="text-3xl" />
+          </button>
+          <main className="">{children}</main>
+
+        </div>
+
       ) : (
         //DESKOPT
-        <div className="main-container flex">
+        <div className="main-container flex overflow-hidden">
           <div className={` ${isDashboardOpen ? 'w-72' : 'w-20'} deskopt-navbar h-screen duration-300 p-5 pt-8 pb-8 pl-4 pr-4 rounded-3xl relative top-0 left-0 m-5 flex flex-col items-center`} style={{ height: 'calc(100vh - 45px)' }}>
-            <BsArrowRightSquareFill onClick={() => setIsDashboardOpen(!isDashboardOpen)} className={`${isDashboardOpen && "rotate-180"} text-4xl absolute cursor-pointer -right-3 top-9 w-7 `} />
-            <div className="flex gap-x-4 items-center justify-center"> 
-              <img src={bakeryLogo} alt="" className={`${!isDashboardOpen && "scale-0"} w-40 text-white cursor-pointer`} />
+            <BsArrowRightSquareFill onClick={() => setIsDashboardOpen(!isDashboardOpen)} className={`${isDashboardOpen && "rotate-180"} text-4xl absolute cursor-pointer -right-3 top-9 w-7`} />
+            <div className="flex gap-x-4 items-center justify-center">
+              <img src={bakeryLogo} alt="" className={`${!isDashboardOpen && "scale-0"} w-40 text-main-white cursor-pointer`} />
             </div>
             <ul className="pt-6">
               {Menus.map((menu, index) => (
-                <li key={index} className="text-sm flex items-center gap-x-4 cursor-pointer p-2 pl-4 pr-4 hover:bg-orange-800 rounded-md">
+                <li key={index} className="text-sm flex items-center gap-x-4 cursor-pointer p-2 pl-8 pr-8 hover:bg-main-dark hover:text-main-white rounded-md">
                   {menu.icon}
                   <span className={`${!isDashboardOpen && 'hidden'} origin-left duration-200 text-2xl`} >{menu.title}</span>
                 </li>
               ))}
             </ul>
           </div>
-          <div className="p-7 text-2xl font-semibold flex-1 h-screen">
-            <main>{children}</main>
+          <div className="main-content p-7 text-2xl font-semibold flex-1 h-screen overflow-y-auto">
+            {/* bg-main-white rounded-3xl min-h-[94vh] */}
+            <main className="">{children}</main>
           </div>
         </div>
 
