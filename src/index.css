@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: montserrat;
-  src:  url('./assets/fonts/Montserrat-font.ttf');
+  font-family: outfit;
+  src:  url('./assets/fonts/Outfit-font.ttf');
 }
 
 
@@ -21,7 +21,7 @@
 
 
   /*Estandar font, font-color & background-color*/
-  font-family: montserrat;
+  font-family: outfit;
   color-scheme: light dark;
   color: var(--main-dark);
   background-color: var(--main-gray);

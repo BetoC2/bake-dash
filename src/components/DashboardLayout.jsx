@@ -4,7 +4,8 @@ import "./styles/layout.scss";
 import { HiMenuAlt2, HiUser } from "react-icons/hi";
 import { RiDashboardFill } from "react-icons/ri";
 import { BsArrowRightSquareFill } from "react-icons/bs";
-import bakeryLogo from "../assets/img/bmagallanes_logo.png"
+import { BiBarcode } from "react-icons/bi";
+import brandLogo from "../assets/img/bmagallanes_logo.png"
 
 function DashboardLayout({ children, currentPage }) {
 
@@ -39,7 +40,7 @@ function DashboardLayout({ children, currentPage }) {
   //Menus
   const Menus = [
     { title: "Dashboard", href:"/" , icon: <RiDashboardFill className={`text-3xl cursor-pointer duration-500`}/> },
-    { title: "Productos", href:"/products", icon: <HiMenuAlt2 className={`text-3xl cursor-pointer duration-500`} /> },
+    { title: "Productos", href:"/products", icon: <BiBarcode  className={`text-3xl cursor-pointer duration-500`} /> },
     { title: "Usuarios", href:"/users", icon: <HiUser className={`text-3xl cursor-pointer duration-500`} /> }
   ]
 
@@ -57,6 +58,9 @@ function DashboardLayout({ children, currentPage }) {
           >
             <HiMenuAlt2 className="text-3xl" />
           </button>
+          <div className="flex gap-x-4 items-center justify-left pl-8">
+              <img src={brandLogo} alt="" className={`$ w-40 text-main-white cursor-pointer`} />
+            </div>
           <main className="">{children}</main>
 
         </div>
@@ -67,11 +71,11 @@ function DashboardLayout({ children, currentPage }) {
           <div className={` ${isDashboardOpen ? 'w-72' : 'w-20'} deskopt-navbar h-screen duration-300 p-5 pt-8 pb-8 pl-4 pr-4 rounded-3xl relative top-0 left-0 m-5 flex flex-col items-center`} style={{ height: 'calc(100vh - 45px)' }}>
             <BsArrowRightSquareFill onClick={() => setIsDashboardOpen(!isDashboardOpen)} className={`${isDashboardOpen && "rotate-180"} text-4xl absolute cursor-pointer -right-3 top-9 w-7`} />
             <div className="flex gap-x-4 items-center justify-center">
-              <img src={bakeryLogo} alt="" className={`${!isDashboardOpen && "scale-0"} w-40 text-main-white cursor-pointer`} />
+              <img src={brandLogo} alt="" className={`${!isDashboardOpen && "scale-0"} w-40 text-main-white cursor-pointer`} />
             </div>
             <ul className="pt-6">
               {Menus.map((menu, index) => (
-                <Link key={index} to={menu.href} className={`text-sm flex items-center gap-x-4 cursor-pointer p-2 pl-8 pr-8 hover:bg-main-dark hover:text-main-white rounded-md ${currentPage === menu.title ? 'bg-main-dark text-main-white' : ''}`}>
+                <Link key={index} to={menu.href} className={`text-sm flex items-center gap-x-4 cursor-pointer p-2 pl-8 pr-8 sm:pl-4 sm:pr-4 hover:bg-main-dark hover:text-main-white rounded-md ${currentPage === menu.title ? 'bg-main-dark text-main-white' : ''}`}>
                   {menu.icon}
                   <span className={`${!isDashboardOpen && 'hidden'} origin-left duration-200 text-2xl`} >{menu.title}</span>
                 </Link>
@@ -104,7 +108,7 @@ function DashboardLayout({ children, currentPage }) {
               </a>
             </li>
             <li className="mb-4 flex items-center">
-              <HiMenuAlt2 className="mr-2" />
+              <BiBarcode className="mr-2" />
               <a href="/products" onClick={toggleMenu}>
                 Productos
               </a>
