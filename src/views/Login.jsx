@@ -15,7 +15,7 @@ function Login() {
                 type="text"
                 id="username"
                 placeholder="Usuario"
-                className=" bg-main-gray w-full rounded-md p-2 outline-none"
+                className=" bg-gray-200 w-full rounded-md p-2 outline-none"
               />
             </div>
             <div className="mb-4">
@@ -23,7 +23,7 @@ function Login() {
                 type="password"
                 id="password"
                 placeholder="Contraseña"
-                className="w-full bg-main-gray rounded-md p-2 outline-none"
+                className="w-full bg-gray-200 rounded-md p-2 outline-none"
               />
             </div>
             <div className="mb-4 flex items-center justify-center">

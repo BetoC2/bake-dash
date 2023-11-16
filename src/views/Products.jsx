@@ -14,6 +14,7 @@ function Products() {
   return (
     <DashboardLayout currentPage={currentPage}>
       <div className="mb-8 flex flex-col items-center justify-center">
+        <h1 className="text-4xl mb-8">Productos</h1>
         <button className="flex items-center bg-main-dark text-main-white py-2 px-4 rounded-xl mb-8 text-xl lg:text-lg xl:text-lg ">
           {/* <FaPlus className="mr-2" /> */}
           Nuevo Producto
@@ -32,17 +33,16 @@ function Products() {
       </div>
       <div className="p-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 w-full p-12 sm:p-8 lg:p-0 xl:p-0">
         {Array.from({ length: 36 }).map((_, index) => (
-          <div
-            key={index}
-            className="bg-gray-300 w-full h-40 rounded-3xl flex items-center justify-center"
-          >
+          <div key={index} className="w-full h-52 rounded-3xl flex flex-col items-center justify-center">
             <img
               src={testImg}
               alt={`Producto ${index + 1}`}
-              className="object-cover w-full h-full rounded-xl"
+              className="object-cover w-full h-3/4 rounded-xl"
             />
+            <p className="text-center mt-2 text-sm ">Descripción del producto {index + 1}</p>
           </div>
         ))}
+
       </div>
     </DashboardLayout>
   );

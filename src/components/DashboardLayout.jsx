@@ -5,7 +5,9 @@ import { HiMenuAlt2, HiUser } from "react-icons/hi";
 import { RiDashboardFill } from "react-icons/ri";
 import { BsArrowRightSquareFill } from "react-icons/bs";
 import { BiBarcode } from "react-icons/bi";
+import { FaBell } from "react-icons/fa";
 import brandLogo from "../assets/img/bmagallanes_logo.png"
+import userImg from "../assets/img/user.png"
 
 function DashboardLayout({ children, currentPage }) {
 
@@ -39,9 +41,9 @@ function DashboardLayout({ children, currentPage }) {
 
   //Menus
   const Menus = [
-    { title: "Dashboard", href:"/" , icon: <RiDashboardFill className={`text-3xl cursor-pointer duration-500`}/> },
-    { title: "Productos", href:"/products", icon: <BiBarcode  className={`text-3xl cursor-pointer duration-500`} /> },
-    { title: "Usuarios", href:"/users", icon: <HiUser className={`text-3xl cursor-pointer duration-500`} /> }
+    { title: "Dashboard", href: "/", icon: <RiDashboardFill className={`text-3xl cursor-pointer duration-500`} /> },
+    { title: "Productos", href: "/products", icon: <BiBarcode className={`text-3xl cursor-pointer duration-500`} /> },
+    { title: "Usuarios", href: "/users", icon: <HiUser className={`text-3xl cursor-pointer duration-500`} /> }
   ]
 
 
@@ -59,8 +61,8 @@ function DashboardLayout({ children, currentPage }) {
             <HiMenuAlt2 className="text-3xl" />
           </button>
           <div className="flex gap-x-4 items-center justify-left pl-8">
-              <img src={brandLogo} alt="" className={`$ w-40 text-main-white cursor-pointer`} />
-            </div>
+            <img src={brandLogo} alt="" className={`$ w-40 text-main-white cursor-pointer`} />
+          </div>
           <main className="">{children}</main>
 
         </div>
@@ -68,14 +70,25 @@ function DashboardLayout({ children, currentPage }) {
       ) : (
         //DESKOPT
         <div className="main-container flex overflow-hidden">
-          <div className={` ${isDashboardOpen ? 'w-72' : 'w-20'} deskopt-navbar h-screen duration-300 p-5 pt-8 pb-8 pl-4 pr-4 rounded-3xl relative top-0 left-0 m-5 flex flex-col items-center`} style={{ height: 'calc(100vh - 45px)' }}>
-            <BsArrowRightSquareFill onClick={() => setIsDashboardOpen(!isDashboardOpen)} className={`${isDashboardOpen && "rotate-180"} text-4xl absolute cursor-pointer -right-3 top-9 w-7`} />
-            <div className="flex gap-x-4 items-center justify-center">
-              <img src={brandLogo} alt="" className={`${!isDashboardOpen && "scale-0"} w-40 text-main-white cursor-pointer`} />
+          <div className="flex justify-between items-center navbar fixed top-0 w-full bg-main-gray z-50">
+            <img src={brandLogo} alt="" className="w-40 text-main-white cursor-pointer ml-8" />
+            <div className="relative">
+              <FaBell
+                className="text-3xl text-main-dark bg-gray-200 cursor-pointer mr-8"
+                style={{ padding: '8px', borderRadius: '20%' }}
+              />
             </div>
+          </div>
+  
+          <div className={` ${isDashboardOpen ? 'w-72' : 'w-20'} mt-32 deskopt-navbar h-screen duration-300 p-5 pt-8 pb-8 pl-4 pr-4 rounded-3xl relative top-0 left-0 m-5 flex flex-col items-center`} style={{ height: 'calc(86vh - 45px)' }}>
+            <div className="flex gap-x-4 items-center justify-center">
+              <img src={userImg} alt="" className={`w-12 text-main-white cursor-pointer duration 500`} />
+              <h1 className={`${!isDashboardOpen && 'hidden'} text-main-dark origin-left duration-300 text-2xl`}>User One</h1>
+            </div>
+            <BsArrowRightSquareFill onClick={() => setIsDashboardOpen(!isDashboardOpen)} className={`${isDashboardOpen && "rotate-180"} text-4xl absolute cursor-pointer -right-3 top-9 w-7`} />
             <ul className="pt-6">
               {Menus.map((menu, index) => (
-                <Link key={index} to={menu.href} className={`text-sm flex items-center gap-x-4 cursor-pointer p-2 pl-8 pr-8 sm:pl-4 sm:pr-4 hover:bg-main-dark hover:text-main-white rounded-md ${currentPage === menu.title ? 'bg-main-dark text-main-white' : ''}`}>
+                <Link key={index} to={menu.href} className={`text-sm flex items-center gap-x-4 cursor-pointer p-2 pl-8 pr-8 mb-3 sm:pl-4 sm:pr-4 hover:bg-main-dark hover:text-main-white rounded-md ${currentPage === menu.title ? 'bg-main-dark text-main-white' : ''}`}>
                   {menu.icon}
                   <span className={`${!isDashboardOpen && 'hidden'} origin-left duration-200 text-2xl`} >{menu.title}</span>
                 </Link>
@@ -84,7 +97,7 @@ function DashboardLayout({ children, currentPage }) {
           </div>
           <div className="main-content p-7 text-2xl font-semibold flex-1 h-screen overflow-y-auto">
             {/* bg-main-white rounded-3xl min-h-[94vh] */}
-            <main className="">{children}</main>
+            <main className="mt-24">{children}</main>
           </div>
         </div>
 

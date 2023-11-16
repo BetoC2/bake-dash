@@ -244,6 +244,7 @@ export default function Users() {
         currentPage={currentPage}
         className="pl-8 pr-8"
       >
+          <h1 className="text-4xl mb-8">Usuarios</h1>
         {/* Parte del boton modal y la barra de búsqueda */}
         <div className="flex flex-col h-[100%] p-2">
           <ToolsSection
