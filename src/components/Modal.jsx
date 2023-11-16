@@ -30,6 +30,7 @@ export default function Modal({
 
   const modalHeader = `mx-auto sticky top-0 bg-white flex items-center justify-center pt-6`;
 
+  // Modal 
   return (
     <>
       {modalState && (
