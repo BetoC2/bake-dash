@@ -6,6 +6,7 @@ import {
   Products,
   Users,
   Error404,
+  Sales,
   // NotFound,
   // Portfolio,
   // AboutUs,
@@ -25,7 +26,7 @@ function App() {
         <Route path="/products" element={<Products />} />
         <Route path="/users" element={<Users />} />
         <Route path="/404" element={<Error404 />} />
-
+        <Route path="/sales" element={<Sales />} />
         {/* <Route path="/Portafolio" element={<Portfolio />} />
       <Route path="/AboutUs" element={<AboutUs />} />
       <Route path="/LandingPages" element={<LandingPages />} />
