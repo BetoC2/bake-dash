@@ -70,7 +70,7 @@ function DashboardLayout({ children, currentPage }) {
       ) : (
         //DESKOPT
         <div className="main-container flex overflow-hidden">
-          <div className="flex justify-between items-center navbar fixed top-0 w-full bg-main-gray z-50">
+          <div className="flex justify-between items-center navbar fixed top-0 w-full bg-main-gray z-9">
             <img src={brandLogo} alt="" className="w-40 text-main-white cursor-pointer ml-8" />
             <div className="relative">
               <FaBell

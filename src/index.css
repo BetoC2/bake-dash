@@ -3,10 +3,19 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: outfit;
-  src:  url('./assets/fonts/Outfit-font.ttf');
+  font-family: Mont-Regular;
+  src:  url('./assets/fonts/Mont-Regular.otf');
 }
 
+@font-face {
+  font-family: Mont-Semibold;
+  src:  url('./assets/fonts/Mont-SemiBold.otf');
+}
+
+@font-face {
+  font-family: Mont-Heavy;
+  src:  url('./assets/fonts/Mont-Heavy.otf');
+}
 
 :root {
   /*Colors used around the hole project*/
@@ -22,7 +31,7 @@
 
 
   /*Estandar font, font-color & background-color*/
-  font-family: outfit;
+  font-family: Mont-Regular;
   color-scheme: light;
   color: var(--main-dark);
   background-color: var(--main-gray);
