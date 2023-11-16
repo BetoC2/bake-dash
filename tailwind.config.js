@@ -12,6 +12,7 @@ export default {
         'main-dark': '#222222',
         'main-green': '#AEF3B3',
         'main-red': '#FFBAB5',
+        'main-blue': '#CCE1FE',
         'secondary-dark': '#B8B8B8',
       },
     },

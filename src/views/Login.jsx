@@ -6,7 +6,7 @@ function Login() {
   return (
     <div className="flex h-screen">
       <div className="w-full md:w-1/2 flex items-center justify-center relative">
-        <img src={brandLogo} alt="Logo" className=" w-40 h-24 absolute top-4 left-4 h-4" />
+        <img src={brandLogo} alt="Logo" className=" w-40 h-28 absolute top-4 left-4 h-4" />
         <div className="w-full md:w-3/4 p-8">
           <h2 className="text-5xl mb-8 text-center">Inicia Sesión</h2>
           <form>
@@ -15,7 +15,7 @@ function Login() {
                 type="text"
                 id="username"
                 placeholder="Usuario"
-                className="w-full bg-main-gray rounded-md p-2 outline-none"
+                className=" bg-main-gray w-full rounded-md p-2 outline-none"
               />
             </div>
             <div className="mb-4">

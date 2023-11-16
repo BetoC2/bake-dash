@@ -12,7 +12,7 @@ function Home() {
   
   return (
     <DashboardLayout currentPage={currentPage}>
-      <h1>Home</h1>
+      <h1 className="text-main-gray">Home</h1>
     </DashboardLayout>
   );
 }
