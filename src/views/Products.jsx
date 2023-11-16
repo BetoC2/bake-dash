@@ -1,6 +1,5 @@
-
 import React, { useEffect, useState } from "react";
-import { FaPlus, FaSearch } from 'react-icons/fa';
+import { FaPlus, FaSearch } from "react-icons/fa";
 import { DashboardLayout } from "../components";
 import { CiCirclePlus } from "react-icons/ci";
 import testImg from "../assets/img/products/product1.jpg";
@@ -11,7 +10,6 @@ function Products() {
   useEffect(() => {
     setCurrentPage("Productos");
   }, []);
-
 
   return (
     <DashboardLayout currentPage={currentPage}>
