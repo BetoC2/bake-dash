@@ -8,7 +8,7 @@ function Error404() {
   return (
     <div className="flex h-screen">
       <div className="w-full md:w-1/2 flex flex-col items-center justify-center relative">
-        <img src={brandLogo} alt="Logo" className="w-40 h-24 absolute top-4 left-4 h-4" />
+      <img src={brandLogo} alt="Logo" className={`$ w-40 text-main-white absolute top-1 left-4 cursor-pointer`} />
         <div className="w-full md:w-3/4 p-8 flex flex-col items-center">
           <h1 className="mb-4 sm:text-9xl" style={{ fontSize: "13rem" }}>404</h1>
             <h2 className="text-xl mb-8">Página no encontrada</h2>
