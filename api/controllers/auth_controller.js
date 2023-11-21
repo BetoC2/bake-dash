@@ -1,6 +1,6 @@
 import User from "../models/user_model.js";
 import bcrypt from "bcryptjs";
-import createAccessToken from "../libs/jws.js";
+import { TOKEN_ADMIN } from "../config.js";
 
 export const register = async (req, res) => {
   const { name, email, pass, age, employment, phone } = req.body;
@@ -17,8 +17,6 @@ export const register = async (req, res) => {
     });
 
     const userData = await newUser.save();
-    const token = await createAccessToken({ id: userData._id });
-    res.cookie("token", token);
     res.json({
       status: "success",
       message: "User created successfully",
@@ -41,23 +39,14 @@ export const login = async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
-    const token = await createAccessToken({ id: userFound._id });
-
-    res.cookie("token", token);
     res.json({
-      status: "success",
-      message: "login successfully",
       id: userFound._id,
       email: userFound.email,
+      admin: userFound._id == TOKEN_ADMIN, //process.env.TOKEN_ADMIN,
     });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
-};
-
-export const logout = async (req, res) => {
-  res.clearCookie("token");
-  res.json({ message: "Logout successfully" });
 };
 
 export const profile = async (req, res) => {
@@ -68,5 +57,6 @@ export const profile = async (req, res) => {
   return res.json({
     id: userFound._id,
     email: userFound.email,
+    admin: userFound._id == TOKEN_ADMIN, //process.env.TOKEN_ADMIN,
   });
 };

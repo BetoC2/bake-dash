@@ -2,15 +2,17 @@ import jwt from "jsonwebtoken";
 import { TOKEN_SECRET } from "../config.js";
 
 export const authRequiered = (req, res, next) => {
-  const { token } = req.cookies;
-  if (!token) {
-    return res.status(401).json({ message: "No token, authorization denied" });
+  const body = req.body;
+  if (!body.id) {
+    return res.status(401).json({ message: "You are not logged in" });
   }
-  jwt.verify(token, TOKEN_SECRET, (err, decoded) => {
-    if (err) {
-      return res.status(401).json({ message: "Token is not valid" });
-    }
-    req.user = decoded;
-  });
+  next();
+};
+
+export const adminAuth = (req, res, next) => {
+  const id = req.body.id;
+  if (id !== TOKEN_ADMIN) {
+    return res.status(401).json({ message: "You are not admin" });
+  }
   next();
 };
