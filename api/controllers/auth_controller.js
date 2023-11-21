@@ -1,14 +1,14 @@
 import User from "../models/user_model.js";
 import bcrypt from "bcryptjs";
-import { TOKEN_ADMIN } from "../config.js";
 
 export const register = async (req, res) => {
-  const { name, email, pass, age, employment, phone } = req.body;
+  const { name, username, email, pass, age, employment, phone } = req.body;
   try {
     const password = await bcrypt.hash(pass, 10);
 
     const newUser = User({
       name,
+      username,
       email,
       pass: password,
       age,
@@ -21,6 +21,7 @@ export const register = async (req, res) => {
       status: "success",
       message: "User created successfully",
       id: userData._id,
+      username: userData.username,
       email: userData.email,
     });
   } catch (err) {
@@ -42,7 +43,8 @@ export const login = async (req, res) => {
     res.json({
       id: userFound._id,
       email: userFound.email,
-      admin: userFound._id == TOKEN_ADMIN, //process.env.TOKEN_ADMIN,
+      username: userFound.username,
+      employment: userFound.employment,
     });
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -56,7 +58,11 @@ export const profile = async (req, res) => {
   }
   return res.json({
     id: userFound._id,
+    name: userFound.name,
+    username: userFound.username,
     email: userFound.email,
-    admin: userFound._id == TOKEN_ADMIN, //process.env.TOKEN_ADMIN,
+    age: userFound.age,
+    employment: userFound.employment,
+    phone: userFound.phone,
   });
 };

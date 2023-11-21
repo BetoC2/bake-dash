@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ProtectedRoute, AdminRoute } from "./Routes";
 import {
   Home,
   Login,
@@ -21,15 +22,16 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
-        {/* No conectado por HTML */}
         <Route path="/login" element={<Login />} />
-        {/* No conectado por HTML */}
         <Route path="/404" element={<Error404 />} />
-        <Route path="/products" element={<Products />} />
-        <Route path="/users" element={<Users />} />
-        {/* No conectado por HTML */}
-        <Route path="/sales" element={<Sales />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/sales" element={<Sales />} />
+        </Route>
+        <Route element={<AdminRoute />}>
+          <Route path="/products" element={<Products />} />
+          <Route path="/users" element={<Users />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );

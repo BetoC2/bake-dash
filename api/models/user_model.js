@@ -22,8 +22,7 @@ const userSchema = new mongoose.Schema({
   },
   employment: {
     type: String,
-    //enum: ["student", "employed", "unemployed"],
-    //default: "unemployed",
+    enum: ["Vendedor", "Repartidor", "Almacén"],
     required: true,
   },
   phone: {
