@@ -1,3 +1,39 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: Mont-Regular;
+  src:  url('./assets/fonts/Mont-Regular.otf');
+}
+
+@font-face {
+  font-family: Mont-Semibold;
+  src:  url('./assets/fonts/Mont-SemiBold.otf');
+}
+
+@font-face {
+  font-family: Mont-Heavy;
+  src:  url('./assets/fonts/Mont-Heavy.otf');
+}
+
+:root {
+  /*Colors used around the hole project*/
+  --main-gray: #F9F9F9;
+  --main-white: #FFFFFF;
+  --main-dark: #222222;
+  --main-green: #DFFDE1;
+  --main-red: #FFBAB5;
+  --main-blue: #CCE1FE;
+  --main-purple: #E0D9F2;
+  --secondary-dark: #E6E6E6
+
+
+
+  /*Estandar font, font-color & background-color*/
+  font-family: Mont-Regular;
+  color-scheme: light;
+  color: var(--main-dark);
+  background-color: var(--main-gray);
+
+}

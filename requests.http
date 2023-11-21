@@ -1,0 +1,43 @@
+### 
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+    "name": "Administrator",
+    "email": "admin@admin.com",
+    "pass": "Chilaquiles123",
+    "age": 20,
+    "employment": "Admin",
+    "phone": "1234567890"
+}
+
+### 
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+    "name": "test",
+    "email": "test@correo.com",
+    "pass": "password",
+    "age": 20,
+    "employment": "x",
+    "phone": "1234567890"
+}
+
+###
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+    "email": "admin@admin.com",
+    "pass": "Chilaquiles13"
+}
+###
+
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+    "email": "test@correo.com",
+    "pass": "password"
+}
