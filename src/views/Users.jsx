@@ -437,21 +437,19 @@ export default function Users() {
               }
             />
           </div>
-          <div className="p-1 bottom-0 mt-6 absoulte items-center justify-items-center text-center ">
+          <div className="p-1 flex justify-between mt-6 text-lg">
             <button
               type="submit"
-              className="bottom-0 pt-3 pb-3 w-full bg-[#ffbab5] rounded-md"
+              className="pt-3 pb-3 w-[45%] bg-[#ffbab5] rounded-md"
               onClick={removeUser}
             >
-              Eliminar usuario
+              Eliminar <br /> usuario
             </button>
-          </div>
-          <div className="p-1 bottom-0 mt-6 absoulte items-center justify-items-center text-center ">
             <button
               type="submit"
-              className="bottom-0 pt-3 pb-3 w-full bg-[#DFFDE1] rounded-md"
+              className="pt-3 pb-3 w-[45%] bg-[#DFFDE1] rounded-md"
             >
-              Guardar cambios
+              Guardar <br /> cambios
             </button>
           </div>
         </form>
