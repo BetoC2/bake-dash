@@ -14,12 +14,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  age: {
-    type: Number,
-    min: 0,
-    max: 120,
-    required: true,
-  },
   employment: {
     type: String,
     enum: ["Vendedor", "Repartidor", "Almacén"],

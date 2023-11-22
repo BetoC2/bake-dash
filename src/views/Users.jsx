@@ -6,136 +6,8 @@ import { IoIosAddCircleOutline } from "react-icons/io";
 import { FaSearch } from "react-icons/fa";
 import { RiPencilFill } from "react-icons/ri";
 
-const data = [
-  {
-    id: "01",
-    name: "Carlos Ramirez",
-    type: "Vendedor",
-    email: "carlos900@gmail.com",
-    phone: "3321984309",
-  },
-  {
-    id: "02",
-    name: "Ana Martinez",
-    type: "Cliente",
-    email: "ana.m@gmail.com",
-    phone: "5551234567",
-  },
-  {
-    id: "03",
-    name: "Juan Lopez",
-    type: "Proveedor",
-    email: "juan.lopez@gmail.com",
-    phone: "3339876543",
-  },
-  {
-    id: "04",
-    name: "Maria Garcia",
-    type: "Vendedor",
-    email: "maria.garcia@gmail.com",
-    phone: "7771112233",
-  },
-  {
-    id: "05",
-    name: "Pedro Perez",
-    type: "Cliente",
-    email: "pedro.perez@gmail.com",
-    phone: "9998887776",
-  },
-  {
-    id: "06",
-    name: "Luisa Fernandez",
-    type: "Proveedor",
-    email: "luisa.fernandez@gmail.com",
-    phone: "1112223334",
-  },
-  {
-    id: "07",
-    name: "Luisa Fernandez",
-    type: "Proveedor",
-    email: "luisa.fernandez@gmail.com",
-    phone: "1112223334",
-  },
-  {
-    id: "08",
-    name: "Luisa Fernandez",
-    type: "Proveedor",
-    email: "luisa.fernandez@gmail.com",
-    phone: "1112223334",
-  },
-  {
-    id: "09",
-    name: "Luisa Fernandez",
-    type: "Proveedor",
-    email: "luisa.fernandez@gmail.com",
-    phone: "1112223334",
-  },
-  {
-    id: "01",
-    name: "Carlos Ramirez",
-    type: "Vendedor",
-    email: "carlos900@gmail.com",
-    phone: "3321984309",
-  },
-  {
-    id: "02",
-    name: "Ana Martinez",
-    type: "Cliente",
-    email: "ana.m@gmail.com",
-    phone: "5551234567",
-  },
-  {
-    id: "03",
-    name: "Juan Lopez",
-    type: "Proveedor",
-    email: "juan.lopez@gmail.com",
-    phone: "3339876543",
-  },
-  {
-    id: "04",
-    name: "Maria Garcia",
-    type: "Vendedor",
-    email: "maria.garcia@gmail.com",
-    phone: "7771112233",
-  },
-  {
-    id: "05",
-    name: "Pedro Perez",
-    type: "Cliente",
-    email: "pedro.perez@gmail.com",
-    phone: "9998887776",
-  },
-  {
-    id: "06",
-    name: "Luisa Fernandez",
-    type: "Proveedor",
-    email: "luisa.fernandez@gmail.com",
-    phone: "1112223334",
-  },
-  {
-    id: "07",
-    name: "Luisa Fernandez",
-    type: "Proveedor",
-    email: "luisa.fernandez@gmail.com",
-    phone: "1112223334",
-  },
-  {
-    id: "08",
-    name: "Luisa Fernandez",
-    type: "Proveedor",
-    email: "luisa.fernandez@gmail.com",
-    phone: "1112223334",
-  },
-  {
-    id: "09",
-    name: "Luisa Fernandez",
-    type: "Proveedor",
-    email: "luisa.fernandez@gmail.com",
-    phone: "1112223334",
-  },
-];
-
-const inputClasses = "w-full bg-[#E6E6E6] border-0 rounded-md p-[6px] focus:outline-none focus:border-[#222222] focus:border-2"
+const inputClasses =
+  "w-full bg-[#E6E6E6] border-0 rounded-md p-[6px] focus:outline-none focus:border-[#222222] focus:border-2";
 
 export default function Users() {
   //Set current page
@@ -162,15 +34,97 @@ export default function Users() {
   // Togabble modal
   const [modalState, setModalState] = React.useState(false);
 
+  // Fetching data
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    // Fetching data
+    fetch("http://localhost:3000/user/")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((userData) => {
+        setData(userData.users);
+      })
+      .catch((error) => {
+        console.error("Hubo un problema con la solicitud fetch:", error);
+      });
+  }, []);
+
   // Search Bar
   const [searchTerm, setSearchTerm] = useState("");
+
   const handleSearch = (event) => {
-    console.log(event.target.value);
-    // TODO: buscar usuarios
+    if (event.key === "Enter") {
+      if (searchTerm.trim() === "") {
+        // Si la cadena de búsqueda está vacía, obtener todos los usuarios
+        fetch("http://localhost:3000/user/")
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
+            }
+            return response.json();
+          })
+          .then((userData) => {
+            setData(userData.users);
+          })
+          .catch((error) => {
+            console.error("Hubo un problema con la solicitud fetch:", error);
+            setData([]); // Si hay un error, establecer los datos como vacíos
+          });
+      } else {
+        fetch("http://localhost:3000/user/search/" + searchTerm)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
+            }
+            return response.json();
+          })
+          .then((userData) => {
+            if (userData.usersFound && userData.usersFound.length > 0) {
+              setData(userData.usersFound);
+            } else {
+              setData([]); // Si no hay resultados, establecer los datos como vacíos
+            }
+          })
+          .catch(() => {
+            setData([]); // Si hay un error, establecer los datos como vacíos
+          });
+      }
+    }
+  };
 
+  // Creación de usuario
+  const [formData, setFormData] = useState({
+    name: "",
+    username: "",
+    type: "",
+    email: "",
+    password: "",
+    phone: "",
+  });
 
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    saveUser(formData);
+    setModalState(false);
+    setFormData({
+      name: "",
+      username: "",
+      type: "",
+      email: "",
+      password: "",
+      phone: "",
+    });
+  };
 
-  }
+  const saveUser = (userData) => {
+    console.log("Guardando usuario:", userData);
+  };
+
   return (
     <>
       {/* Modal de usuario :) */}
@@ -181,9 +135,9 @@ export default function Users() {
         setIsMobile={setIsMobile}
         title="Agregar nuevo usuario"
       >
-        <form onSubmit="" className="mt-10 text-md font-semibold">
+        <form onSubmit={handleSubmit} className="mt-10 text-md font-semibold">
           <div className="p-1 mb-3">
-            <p className="mb-1">Nombre del usuario:</p>
+            <p className="mb-1">Nombre:</p>
             <input
               className={inputClasses}
               type="text"
@@ -192,17 +146,24 @@ export default function Users() {
             />
           </div>
           <div className="p-1 mb-3">
-            <p className="mb-1">  Tipo:</p>
+            <p className="mb-1">Nombre de usuario:</p>
+            <input
+              className={inputClasses}
+              type="text"
+              id="usernameInput"
+              name="username"
+            />
+          </div>
+          <div className="p-1 mb-3">
+            <p className="mb-1"> Tipo:</p>
             <select
               id="typeInput"
               name="type"
               className={`${inputClasses} font-light`}
-
             >
-              <option className="text-sm" value="">Seleccionar tipo</option>
-              <option className="text-sm" value="Vendedor">Vendedor</option>
-              <option className="text-sm" value="Cliente">Cliente</option>
-              <option className="text-sm" value="Proveedor">Proveedor</option>
+              <option className="text-sm" value="Vendedor">
+                Vendedor
+              </option>
             </select>
           </div>
           <div className="p-1 mb-3">
@@ -233,7 +194,12 @@ export default function Users() {
             />
           </div>
           <div className="p-1 bottom-0 mt-6 absoulte items-center justify-items-center text-center ">
-            <button type="submit" className="bottom-0 pt-3 pb-3 w-full bg-[#DFFDE1] rounded-md">Guardar usuario</button>
+            <button
+              type="submit"
+              className="bottom-0 pt-3 pb-3 w-full bg-[#DFFDE1] rounded-md"
+            >
+              Guardar usuario
+            </button>
           </div>
         </form>
       </Modal>
@@ -244,7 +210,7 @@ export default function Users() {
         currentPage={currentPage}
         className="pl-8 pr-8"
       >
-          <h1 className="text-4xl mb-8">Usuarios</h1>
+        <h1 className="text-4xl mb-8">Usuarios</h1>
         {/* Parte del boton modal y la barra de búsqueda */}
         <div className="flex flex-col h-[100%] p-2">
           <ToolsSection
@@ -258,8 +224,9 @@ export default function Users() {
                 className={`${isMobile ? "text-2xl" : ""}`}
               />
               <p
-                className={`${isMobile ? "pl-2 pb-1 text-lg font-semibold" : "pl-2 pb-1"
-                  }`}
+                className={`${
+                  isMobile ? "pl-2 pb-1 text-lg font-semibold" : "pl-2 pb-1"
+                }`}
               >
                 Nuevo Usuario
               </p>
@@ -270,9 +237,13 @@ export default function Users() {
                 <input
                   type="text"
                   placeholder="Buscar usuarios por nombre o ID"
-                  className={`p-2 pl-8 w-full rounded-3xl ${isMobile ? "text-md" : "text-lg"
-                    } bg-main-white border-0`}
+                  className={`p-2 pl-8 w-full rounded-3xl ${
+                    isMobile ? "text-md" : "text-lg"
+                  } bg-main-white border-0`}
                   style={{ paddingLeft: "3rem" }}
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onKeyDown={handleSearch}
                 />
                 <div className="absolute inset-y-0 left-2 pl-2 flex items-center pointer-events-none">
                   <FaSearch className={`${isMobile ? "text-xl" : ""}`} />
@@ -284,16 +255,18 @@ export default function Users() {
           {/* Parte de la seleccion de usuarios */}
           <UsersSection className={`bg-white rounded-xl`}>
             <div
-              className={"h-[100%] overflow-hidden overflow-y-auto overflow-x-auto"}
+              className={
+                "h-[100%] overflow-hidden overflow-y-auto overflow-x-auto"
+              }
             >
-              <table
-                className={"w-full border-collapse rounded-xl"}
-              >
+              <table className={"w-full border-collapse rounded-xl"}>
                 <thead
-                  className={"border-b border-[F9F9F9] sticky top-0 z-[1] bg-white"}
+                  className={
+                    "border-b border-[F9F9F9] sticky top-0 z-[1] bg-white"
+                  }
                 >
                   <tr className={`${isMobile ? "m-2" : "p-4"}`}>
-                    <th>ID</th>
+                    <th></th>
                     <th>Nombre</th>
                     {isMobile && <th></th>}
                     <th>Tipo</th>
@@ -304,19 +277,53 @@ export default function Users() {
                 </thead>
                 <tbody>
                   {data.map((item, index) => (
-                    <tr key={index} className="p-1">
-                      <td className={`${isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2"}`}>{item.id}</td>
-                      <td className={`${isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2"}`}>{item.name}</td>
+                    <tr key={item._id} className="p-1">
+                      <td
+                        className={`${
+                          isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2"
+                        }`}
+                      >
+                        {index + 1}
+                      </td>
+                      <td
+                        className={`${
+                          isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2"
+                        }`}
+                      >
+                        {item.name}
+                      </td>
                       {isMobile && (
-                        <td className={`${isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2 pr-4"}`}>
+                        <td
+                          className={`${
+                            isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2 pr-4"
+                          }`}
+                        >
                           <button className="bg-[#CCE1FE] pt-[3] pb-[3] pl-2 pr-2 rounded-xl">
                             <RiPencilFill />
                           </button>
                         </td>
                       )}
-                      <td className={`${isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2"}`}>{item.type}</td>
-                      <td className={`${isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2"}`}>{item.email}</td>
-                      <td className={`${isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2"}`}>{item.phone}</td>
+                      <td
+                        className={`${
+                          isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2"
+                        }`}
+                      >
+                        {item.employment}
+                      </td>
+                      <td
+                        className={`${
+                          isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2"
+                        }`}
+                      >
+                        {item.email}
+                      </td>
+                      <td
+                        className={`${
+                          isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2"
+                        }`}
+                      >
+                        {item.phone}
+                      </td>
                       {!isMobile && (
                         <td className="pt-2 pr-4">
                           <button className="bg-[#CCE1FE] pt-[3] pb-[3] pl-2 pr-2 rounded-xl">
@@ -347,7 +354,7 @@ const ToolsSection = styled.div`
 
 const UsersSection = styled.div`
   height: 58vh;
-  overflow-x: 'scroll';
+  overflow-x: "scroll";
   thead {
     tr {
       th {

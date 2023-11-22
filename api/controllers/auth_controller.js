@@ -11,7 +11,6 @@ export const register = async (req, res) => {
       username,
       email,
       pass: password,
-      age,
       employment,
       phone,
     });
@@ -61,7 +60,6 @@ export const profile = async (req, res) => {
     name: userFound.name,
     username: userFound.username,
     email: userFound.email,
-    age: userFound.age,
     employment: userFound.employment,
     phone: userFound.phone,
   });
