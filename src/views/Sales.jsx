@@ -3,7 +3,9 @@ import { DashboardLayout, Modal } from "../components";
 import styled from "styled-components";
 
 import { IoIosAddCircleOutline } from "react-icons/io";
+import { IoChevronBack, IoChevronForward, IoTrashBin } from "react-icons/io5";
 import { FaSearch, FaEye } from "react-icons/fa";
+import { RiAddLine, RiArrowUpLine, RiArrowDownLine, RiDeleteBinLine } from 'react-icons/ri';
 
 const data = [
   {
@@ -182,6 +184,45 @@ export default function Sales() {
     console.log(event.target.value);
     // TODO: buscar ventas
   };
+
+  const [productos, setProductos] = useState([]); // Estado para las tarjetas de productos
+
+  const agregarProducto = () => {
+    const nuevoProducto = {
+      id: productos.length + 1,
+      cantidad: 0,
+    };
+
+    setProductos([...productos, nuevoProducto]);
+  };
+
+  const eliminarProducto = (id) => {
+    const nuevosProductos = productos.filter((producto) => producto.id !== id);
+    setProductos(nuevosProductos);
+  };
+
+  const decreaseCantidad = (id) => {
+    const nuevosProductos = productos.map((producto) => {
+      if (producto.id === id && producto.cantidad > 0) {
+        return { ...producto, cantidad: producto.cantidad - 1 };
+      }
+      return producto;
+    });
+
+    setProductos(nuevosProductos);
+  };
+
+  const increaseCantidad = (id) => {
+    const nuevosProductos = productos.map((producto) => {
+      if (producto.id === id) {
+        return { ...producto, cantidad: producto.cantidad + 1 };
+      }
+      return producto;
+    });
+
+    setProductos(nuevosProductos);
+  };
+
   return (
     <>
       {/* Modal de venta :) */}
@@ -194,28 +235,47 @@ export default function Sales() {
       >
         <form onSubmit="" className="mt-10 text-md font-semibold">
           {/* Productos */}
-          <div className="p-1 mb-3">
-            <p className="mb-1"> Productos</p>
-            <select
-              id="products"
-              name="type"
-              className={`${inputClasses} font-light`}
-            >
-              <option className="text-sm" value="">
-                Seleccionar producto
-              </option>
-              <option className="text-sm" value="Mantecada">
-                Mantecada
-              </option>
-              <option className="text-sm" value="Concha">
-                Concha
-              </option>
-              <option className="text-sm" value="Dona">
-                Dona
-              </option>
-            </select>
+          <div className="p-1 mb-3 relative">
+            <p className="mb-1">Productos</p>
+            <div className="relative">
+  <input type="text" placeholder="Ingrese el id del producto" className={`relative ${inputClasses}`} />
+  <RiAddLine
+    className="absolute right-3 top-0 pt-2 text-3xl cursor-pointer"
+    onClick={agregarProducto}
+  />
+</div>
+
+
+            {/* Mostrar las tarjetas de productos */}
+            {productos.map((producto) => (
+              <div
+                className="w-full bg-main-dark mt-4 flex items-center justify-between px-4 py-2 rounded-md"
+                key={producto.id}
+              >
+                <h4 className="text-main-white text-sm">Producto {producto.id}</h4>
+                <div className="flex items-center ml-auto mr-4">
+                  <IoChevronBack
+                    className="text-white mr-2 cursor-pointer"
+                    onClick={() => decreaseCantidad(producto.id)}
+                  />
+                  <input
+                    type="text"
+                    value={producto.cantidad}
+                    className="border px-2 py-1 rounded-md focus:outline-none w-12"
+                    readOnly
+                  />
+                  <IoChevronForward
+                    className="text-white ml-2 cursor-pointer"
+                    onClick={() => increaseCantidad(producto.id)}
+                  />
+                </div>
+                <IoTrashBin
+                  className="text-white cursor-pointer text-2xl"
+                  onClick={() => eliminarProducto(producto.id)}
+                />
+              </div>
+            ))}
           </div>
-          {/* Metodo de pago */}
           <div className="p-1 mb-3">
             <p className="mb-1"> Metodo de pago</p>
             <select
@@ -287,9 +347,8 @@ export default function Sales() {
                 className={`${isMobile ? "text-2xl" : ""}`}
               />
               <p
-                className={`${
-                  isMobile ? "pl-2 pb-1 text-lg font-semibold" : "pl-2 pb-1"
-                }`}
+                className={`${isMobile ? "pl-2 pb-1 text-lg font-semibold" : "pl-2 pb-1"
+                  }`}
               >
                 Nueva venta
               </p>
@@ -300,9 +359,8 @@ export default function Sales() {
                 <input
                   type="text"
                   placeholder="Buscar una venta pasada"
-                  className={`p-2 pl-8 w-full rounded-3xl ${
-                    isMobile ? "text-md" : "text-lg"
-                  } bg-main-white border-0`}
+                  className={`p-2 pl-8 w-full rounded-3xl ${isMobile ? "text-md" : "text-lg"
+                    } bg-main-white border-0`}
                   style={{ paddingLeft: "3rem" }}
                 />
                 <div className="absolute inset-y-0 left-2 pl-2 flex items-center pointer-events-none">
@@ -339,24 +397,21 @@ export default function Sales() {
                   {data.map((item, index) => (
                     <tr key={index} className="p-1">
                       <td
-                        className={`${
-                          isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2"
-                        }`}
+                        className={`${isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2"
+                          }`}
                       >
                         {item.id}
                       </td>
                       <td
-                        className={`${
-                          isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2"
-                        }`}
+                        className={`${isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2"
+                          }`}
                       >
                         {item.date}
                       </td>
                       {isMobile && (
                         <td
-                          className={`${
-                            isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2 pr-4"
-                          }`}
+                          className={`${isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2 pr-4"
+                            }`}
                         >
                           <button className="bg-[#E0D9F2] pt-[3] pb-[3] pl-2 pr-2 rounded-xl">
                             <FaEye />
@@ -364,23 +419,20 @@ export default function Sales() {
                         </td>
                       )}
                       <td
-                        className={`${
-                          isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2"
-                        }`}
+                        className={`${isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2"
+                          }`}
                       >
                         {item.value}
                       </td>
                       <td
-                        className={`${
-                          isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2"
-                        }`}
+                        className={`${isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2"
+                          }`}
                       >
                         {item.vendor}
                       </td>
                       <td
-                        className={`${
-                          isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2"
-                        }`}
+                        className={`${isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2"
+                          }`}
                       >
                         {item.method}
                       </td>
