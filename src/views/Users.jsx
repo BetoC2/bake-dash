@@ -100,71 +100,55 @@ export default function Users() {
   // Creación de usuario
   const [formData, setFormData] = useState({
     name: "",
-    username: "",
-    type: "",
+    type: "Vendedor",
     email: "",
     password: "",
     phone: "",
   });
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    saveUser(formData);
+    saveUser(formData); // Llama a saveUser con los datos del formulario
     setModalState(false);
     setFormData({
       name: "",
-      username: "",
-      type: "",
+      type: "Vendedor",
       email: "",
       password: "",
       phone: "",
     });
   };
 
-  /*
-  const saveUser = (userData) => {
-    console.log("Guardando usuario:", userData);
-  };*/
-
   const saveUser = async (userData) => {
-    try{
-      const response = await fetch("http://localhost:3000/user/register", {
+    const newUser = {
+      name: userData.name,
+      email: userData.email,
+      pass: userData.password,
+      employment: userData.type,
+      phone: userData.phone,
+    };
+    try {
+      const sesion = JSON.parse(sessionStorage.getItem("sesion"));
+      console.log(sesion.employment);
+      const response = await fetch("http://localhost:3000/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          auth: sesion.employment,
         },
-        body: JSON.stringify(userData),
+        body: JSON.stringify(newUser),
       });
 
-      if(!response.ok){
-        throw new Error("Error al guardar el usuario");
+      if (!response.ok) {
+        throw new Error(response.statusText);
       }
 
       const data = await response.json();
       console.log("Usuario guardado con éxito:", data);
-    }catch(error){
-      console.error("Error al guardar el usuario:", error);
+      window.location.reload();
+    } catch (error) {
+      alert(error.message);
     }
-  };
-
-  const handleGuardarUsuarioClick = () => {
-    const name = document.getElementById("nameInput").value;
-    const username = document.getElementById("usernameInput").value;
-    const type = document.getElementById("typeInput").value;
-    const email = document.getElementById("emailInput").value;
-    const password = document.getElementById("passwordInput").value;
-    const phone = document.getElementById("phoneInput").value;
-
-    const userData = {
-      name,
-      username,
-      type,
-      email,
-      password,
-      phone,
-    };
-
-    saveUser(userData);
   };
 
   return (
@@ -183,25 +167,20 @@ export default function Users() {
             <input
               className={inputClasses}
               type="text"
-              id="nameInput"
               name="name"
-            />
-          </div>
-          <div className="p-1 mb-3">
-            <p className="mb-1">Nombre de usuario:</p>
-            <input
-              className={inputClasses}
-              type="text"
-              id="usernameInput"
-              name="username"
+              value={formData.name}
+              onChange={(e) =>
+                setFormData({ ...formData, name: e.target.value })
+              }
             />
           </div>
           <div className="p-1 mb-3">
             <p className="mb-1"> Tipo:</p>
             <select
-              id="typeInput"
               name="type"
               className={`${inputClasses} font-light`}
+              value="Vendedor"
+              onChange={(e) => setFormData({ ...formData, type: "Vendedor" })}
             >
               <option className="text-sm" value="Vendedor">
                 Vendedor
@@ -215,6 +194,10 @@ export default function Users() {
               type="email"
               id="emailInput"
               name="email"
+              value={formData.email}
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
             />
           </div>
           <div className="p-1 mb-3">
@@ -224,6 +207,10 @@ export default function Users() {
               type="password"
               id="passwordInput"
               name="password"
+              value={formData.password}
+              onChange={(e) =>
+                setFormData({ ...formData, password: e.target.value })
+              }
             />
           </div>
           <div className="p-1 mb-3">
@@ -233,13 +220,15 @@ export default function Users() {
               type="tel"
               id="phoneInput"
               name="phone"
+              value={formData.phone}
+              onChange={(e) =>
+                setFormData({ ...formData, phone: e.target.value })
+              }
             />
           </div>
           <div className="p-1 bottom-0 mt-6 absoulte items-center justify-items-center text-center ">
             <button
-              id="buttonSaveUser"
               type="submit"
-              onClick={handleGuardarUsuarioClick}
               className="bottom-0 pt-3 pb-3 w-full bg-[#DFFDE1] rounded-md"
             >
               Guardar usuario
@@ -327,7 +316,7 @@ export default function Users() {
                           isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2"
                         }`}
                       >
-                        {index + 1}
+                        {String(index + 1).padStart(2, "0")}
                       </td>
                       <td
                         className={`${

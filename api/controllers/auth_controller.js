@@ -2,13 +2,12 @@ import User from "../models/user_model.js";
 import bcrypt from "bcryptjs";
 
 export const register = async (req, res) => {
-  const { name, username, email, pass, age, employment, phone } = req.body;
+  const { name, email, pass, employment, phone } = req.body;
   try {
     const password = await bcrypt.hash(pass, 10);
 
     const newUser = User({
       name,
-      username,
       email,
       pass: password,
       employment,
@@ -58,7 +57,6 @@ export const profile = async (req, res) => {
   return res.json({
     id: userFound._id,
     name: userFound.name,
-    username: userFound.username,
     email: userFound.email,
     employment: userFound.employment,
     phone: userFound.phone,

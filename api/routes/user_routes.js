@@ -5,7 +5,6 @@ import {
   getUsers,
   getUserById,
   getUsersByName,
-  saveUser,
 } from "../controllers/user_controller.js";
 import { adminAuth } from "../middlewares/validateAuth.js";
 const router = Router();

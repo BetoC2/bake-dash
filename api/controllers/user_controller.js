@@ -20,17 +20,15 @@ export const remove = async (req, res) => {
 
 export const update = async (req, res) => {
   const { id } = req.params;
-  const { name, username, email, pass, age, employment, phone } = req.body;
+  const { name, email, pass, employment, phone } = req.body;
   try {
     const password = await bcrypt.hash(pass, 10);
     const userFound = await User.findByIdAndUpdate(
       id,
       {
         name,
-        username,
         email,
         pass: password,
-        age,
         employment,
         phone,
       },
@@ -43,7 +41,6 @@ export const update = async (req, res) => {
       status: "success",
       message: "User updated successfully",
       id: userFound._id,
-      username: userFound.username,
       email: userFound.email,
     });
   } catch (err) {
@@ -90,26 +87,5 @@ export const getUsersByName = async (req, res) => {
     });
   } catch (err) {
     res.status(500).json({ message: err.message });
-  }
-};
-
-export const saveUser = async (userData) => {
-  try {
-    const response = await fetch("http://localhost:3000/user/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(userData),
-    });
-
-    if(!response.ok){
-      throw new Error("Error al guardar el usuario");
-    }
-
-    const data = await response.json();
-    console.log("Usuario guardado con éxito:", data);
-  } catch(error){
-    console.error("Error al guardar el usuario:", error);
   }
 };

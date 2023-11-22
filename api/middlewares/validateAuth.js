@@ -9,6 +9,7 @@ export const authRequiered = (req, res, next) => {
 // Para este middleware, se debe enviar un header con el nombre "auth" y el valor "Admin"
 export const adminAuth = (req, res, next) => {
   const authHeader = req.headers["auth"];
+  console.log(typeof req.headers);
 
   if (!authHeader || authHeader !== "Admin") {
     return res
