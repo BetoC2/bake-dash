@@ -15,5 +15,6 @@ router.delete("/:id", adminAuth, remove);
 router.get("/", getUsers);
 router.get("/:id", getUserById);
 router.get("/search/:name", getUsersByName);
+router.get("/:id", saveUser);
 
 export default router;

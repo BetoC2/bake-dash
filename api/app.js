@@ -60,4 +60,20 @@ const App = () => {
   );
 };
 */
+app.post("/user/register", async (req, res) => {
+  try{
+    const userData = req.body;
+
+    // Crea un nuevo usuario en la base de datos
+    const newUser = new User(userData);
+    await newUser.save();
+
+    res.status(201).json({ message: "Usuario creado exitosamente" });
+  }catch(error){
+    console.error("Error al guardar el usuario:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+});
+
+
 export default app;

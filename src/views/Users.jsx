@@ -241,8 +241,7 @@ export default function Users() {
               type="submit"
               onClick={handleGuardarUsuarioClick}
               className="bottom-0 pt-3 pb-3 w-full bg-[#DFFDE1] rounded-md"
-            >
-              Guardar usuario
+            > Guardar usuario
             </button>
           </div>
         </form>
