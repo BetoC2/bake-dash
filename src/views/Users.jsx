@@ -121,8 +121,50 @@ export default function Users() {
     });
   };
 
+  /*
   const saveUser = (userData) => {
     console.log("Guardando usuario:", userData);
+  };*/
+
+  const saveUser = async (userData) => {
+    try{
+      const response = await fetch("http://localhost:3000/user/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      });
+
+      if(!response.ok){
+        throw new Error("Error al guardar el usuario");
+      }
+
+      const data = await response.json();
+      console.log("Usuario guardado con éxito:", data);
+    }catch(error){
+      console.error("Error al guardar el usuario:", error);
+    }
+  };
+
+  const handleGuardarUsuarioClick = () => {
+    const name = document.getElementById("nameInput").value;
+    const username = document.getElementById("usernameInput").value;
+    const type = document.getElementById("typeInput").value;
+    const email = document.getElementById("emailInput").value;
+    const password = document.getElementById("passwordInput").value;
+    const phone = document.getElementById("phoneInput").value;
+
+    const userData = {
+      name,
+      username,
+      type,
+      email,
+      password,
+      phone,
+    };
+
+    saveUser(userData);
   };
 
   return (
@@ -195,7 +237,9 @@ export default function Users() {
           </div>
           <div className="p-1 bottom-0 mt-6 absoulte items-center justify-items-center text-center ">
             <button
+              id="buttonSaveUser"
               type="submit"
+              onClick={handleGuardarUsuarioClick}
               className="bottom-0 pt-3 pb-3 w-full bg-[#DFFDE1] rounded-md"
             >
               Guardar usuario

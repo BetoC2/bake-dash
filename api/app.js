@@ -20,7 +20,7 @@ app.use(express.json());
 app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
 
-// En la misma página, podríamos hacer aparacer un modal
+// En la misma página, podríamos hacer aparecer un modal
 app.post("/barcode", async (req, res) => {
   const { code } = req.body;
 

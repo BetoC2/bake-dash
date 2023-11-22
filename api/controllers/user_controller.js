@@ -92,3 +92,24 @@ export const getUsersByName = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+export const saveUser = async (userData) => {
+  try {
+    const response = await fetch("http://localhost:3000/user/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userData),
+    });
+
+    if(!response.ok){
+      throw new Error("Error al guardar el usuario");
+    }
+
+    const data = await response.json();
+    console.log("Usuario guardado con éxito:", data);
+  } catch(error){
+    console.error("Error al guardar el usuario:", error);
+  }
+};

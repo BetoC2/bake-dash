@@ -1,4 +1,5 @@
 import Product from "../models/product_model.js";
+import barcodeScanner from '../barcodeScanner/BarcodeScanner';
 
 export const getAllProducts = async (req, res) => {
   try {
@@ -96,3 +97,7 @@ export const createProduct = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+export const readProduct = async (req, res) => {
+  
+}

@@ -32,6 +32,7 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/products" element={<Products />} />
           <Route path="/users" element={<Users />} />
+          <Route path="/register" element={<Users />} />
         </Route>
       </Routes>
     </BrowserRouter>

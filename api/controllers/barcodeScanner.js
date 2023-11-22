@@ -16,7 +16,7 @@ const barcodeScanner = ({ onBarcodeRead }) => {
         },
       },
       (err) => {
-        if (err) {
+        if(err){
           console.error("Error al inicializar Quagga:", err);
           return;
         }
@@ -24,10 +24,23 @@ const barcodeScanner = ({ onBarcodeRead }) => {
       }
     );
 
-    Quagga.onDetected((data) => {
+    Quagga.barDetected((data) => {
       const code = data.codeResult.code;
       onBarcodeRead(code);
+      fetch('http://localhost:3001/barcode', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ code }),
+      })
+        .then((response) => response.json())
+        .then((data) => console.log(data.message, data.product))
+        .catch((error) => console.error('Error al verificar el código de barras en el servidor:', error));
     });
+
+    initQuagga();
+    Quagga.onDetected(barDetected)
 
     return () => {
       Quagga.stop();
