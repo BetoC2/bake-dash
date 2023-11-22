@@ -25,10 +25,11 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/404" element={<Error404 />} />
         <Route element={<ProtectedRoute />}>
-          <Route path="/" element={<Home />} />
           <Route path="/sales" element={<Sales />} />
         </Route>
         <Route element={<AdminRoute />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<Home />} />
           <Route path="/products" element={<Products />} />
           <Route path="/users" element={<Users />} />
         </Route>
