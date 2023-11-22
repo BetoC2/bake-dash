@@ -3,6 +3,8 @@ import { FaPlus, FaSearch } from "react-icons/fa";
 import { DashboardLayout } from "../components";
 import { CiCirclePlus } from "react-icons/ci";
 import { Modal } from "../components";
+import { removeProduct } from "../../api/controllers/product_controller";
+import { set } from "mongoose";
 
 const inputClasses =
   "w-full bg-[#E6E6E6] border-0 rounded-md p-[6px] focus:outline-none focus:border-[#222222] focus:border-2";
@@ -15,6 +17,7 @@ function Products() {
   const [createModal, setCreateModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [editProduct, setEditProduct] = useState({
+    id: "",
     imageURL: "",
     name: "",
     description: "",
@@ -117,9 +120,107 @@ function Products() {
       }
     }
   };
-  // Editar producto
+  // Manejar el modal de edición
   const handleEditModal = async (id) => {
     setEditModal(true);
+    try {
+      const response = await fetch("http://localhost:3000/product/" + id, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(response.statusText);
+      }
+
+      const data = await response.json();
+      console.log("producto encontrado con éxito:", data);
+      setEditProduct({
+        id: data._id,
+        name: data.name,
+        description: data.description,
+        price: data.price,
+        imageURL: data.imageURL,
+      });
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+  // Editar producto
+  const handleEditSubmit = async (event) => {
+    event.preventDefault();
+    productEdit(editProduct.id);
+    setEditModal(false);
+    setEditProduct({
+      id: "",
+      imageURL: "",
+      name: "",
+      description: "",
+      price: "",
+    });
+  };
+
+  const productEdit = async (id) => {
+    const data = {
+      imageURL: editProduct.imageURL,
+      name: editProduct.name,
+      description: editProduct.description,
+      price: editProduct.price,
+    };
+    const sesion = JSON.parse(sessionStorage.getItem("sesion"));
+    setEditModal(false);
+    try {
+      const response = await fetch("http://localhost:3000/product/" + id, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          auth: sesion.employment,
+        },
+        body: JSON.stringify(data),
+      });
+      if (!response.ok) {
+        throw new Error(response.statusText);
+      }
+      window.location.reload();
+    } catch (error) {
+      alert(error);
+    }
+  };
+  // Eliminar producto
+  const removeProduct = async () => {
+    const newData = editProduct;
+    setEditModal(false);
+    setEditProduct({
+      id: "",
+      imageURL: "",
+      name: "",
+      description: "",
+      price: "",
+    });
+    const sesion = JSON.parse(sessionStorage.getItem("sesion"));
+    try {
+      const response = await fetch(
+        "http://localhost:3000/product/" + newData.id,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            auth: sesion.employment,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(response.statusText);
+      }
+
+      const data = await response.json();
+      console.log("Usuario eliminado con éxito:", data);
+      window.location.reload();
+    } catch (error) {
+      alert(error.message);
+    }
   };
 
   return (
@@ -203,7 +304,79 @@ function Products() {
         isMobile={isMobile}
         setIsMobile={setIsMobile}
         title="Editar/Eliminar producto"
-      ></Modal>
+      >
+        <form
+          onSubmit={handleEditSubmit}
+          className="mt-10 text-md font-semibold"
+        >
+          <div className="p-1 mb-3">
+            <p className="mb-1">Imagen del producto</p>
+            <input
+              className={inputClasses}
+              type="text"
+              name="imageURL"
+              value={editProduct.imageURL}
+              onChange={(e) =>
+                setEditProduct({ ...editProduct, imageURL: e.target.value })
+              }
+            />
+          </div>
+          <div className="p-1 mb-3">
+            <p className="mb-1">Nombre del producto</p>
+            <input
+              className={inputClasses}
+              type="text"
+              name="name"
+              value={editProduct.name}
+              onChange={(e) =>
+                setEditProduct({ ...editProduct, name: e.target.value })
+              }
+            />
+          </div>
+          <div className="p-1 mb-3">
+            <p className="mb-1">Precio de venta</p>
+            <input
+              className={`${inputClasses}`}
+              type="number"
+              name="price"
+              value={editProduct.price}
+              onChange={(e) =>
+                setEditProduct({ ...editProduct, price: e.target.value })
+              }
+            />
+          </div>
+          <div className="p-1 mb-3">
+            <p className="mb-1">Descripcion</p>
+            <input
+              className={`${inputClasses} h-28`}
+              type="text"
+              name="description"
+              value={editProduct.description}
+              onChange={(e) =>
+                setEditProduct({
+                  ...editProduct,
+                  description: e.target.value,
+                })
+              }
+            />
+          </div>
+          <div className="p-1 flex justify-between mt-6 text-lg">
+            <button
+              type="submit"
+              className="pt-3 pb-3 w-[45%] bg-[#ffbab5] rounded-md"
+              onClick={removeProduct}
+            >
+              Eliminar <br /> producto
+            </button>
+            <button
+              type="submit"
+              className="pt-3 pb-3 w-[45%] bg-[#DFFDE1] rounded-md"
+            >
+              Guardar <br /> cambios
+            </button>
+          </div>
+        </form>
+      </Modal>
       <DashboardLayout currentPage={currentPage}>
         <div className="mb-8 flex flex-col items-center justify-center">
           <h1 className="text-4xl mb-8">Productos</h1>

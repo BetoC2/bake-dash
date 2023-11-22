@@ -10,6 +10,21 @@ const inputClasses =
   "w-full bg-[#E6E6E6] border-0 rounded-md p-[6px] focus:outline-none focus:border-[#222222] focus:border-2";
 
 export default function Users() {
+  const [isMobile, setIsMobile] = useState(false);
+  // Responsive openning
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 1000);
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize();
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   //Set current page
   const [currentPage, setCurrentPage] = useState("Usuarios");
 
@@ -544,6 +559,7 @@ export default function Users() {
                           </button>
                         </td>
                       )}
+                      {isMobile && item.employment == "Admin" && <td />}
                       <td
                         className={`${
                           isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2"
