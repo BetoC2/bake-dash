@@ -21,19 +21,16 @@ export const remove = async (req, res) => {
 export const update = async (req, res) => {
   const { id } = req.params;
   const { name, email, pass, employment, phone } = req.body;
+  let newData = {
+    name,
+    email,
+    employment,
+    phone,
+  };
+  if (pass) newData["pass"] = await bcrypt.hash(pass, 10);
+
   try {
-    const password = await bcrypt.hash(pass, 10);
-    const userFound = await User.findByIdAndUpdate(
-      id,
-      {
-        name,
-        email,
-        pass: password,
-        employment,
-        phone,
-      },
-      { new: true }
-    );
+    const userFound = await User.findByIdAndUpdate(id, newData, { new: true });
     if (!userFound) {
       return res.status(400).json({ message: "User not found" });
     }

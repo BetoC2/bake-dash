@@ -33,6 +33,7 @@ export default function Users() {
   }, []);
   // Togabble modal
   const [modalState, setModalState] = React.useState(false);
+  const [modalState2, setModalState2] = React.useState(false);
 
   // Fetching data
   const [data, setData] = useState([]);
@@ -150,6 +151,129 @@ export default function Users() {
       alert(error.message);
     }
   };
+  // Modal 2
+  // edición de usuario
+  const [editData, setEditData] = useState({
+    id: "",
+    name: "",
+    type: "Vendedor",
+    email: "",
+    password: "",
+    phone: "",
+  });
+
+  const handleEditModal = async (id) => {
+    setModalState2(!modalState2);
+    const sesion = JSON.parse(sessionStorage.getItem("sesion"));
+    try {
+      const response = await fetch("http://localhost:3000/user/" + id, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          auth: sesion.employment,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(response.statusText);
+      }
+
+      const data = await response.json();
+      console.log("Usuario encontrado con éxito:", data);
+      setEditData({
+        id: data.userFound._id,
+        name: data.userFound.name,
+        type: data.userFound.employment,
+        email: data.userFound.email,
+        password: "",
+        phone: data.userFound.phone,
+      });
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
+  const removeUser = async () => {
+    const newData = editData;
+    setModalState2(false);
+    setEditData({
+      id: "",
+      name: "",
+      type: "Vendedor",
+      email: "",
+      password: "",
+      phone: "",
+    });
+    const sesion = JSON.parse(sessionStorage.getItem("sesion"));
+    try {
+      const response = await fetch("http://localhost:3000/user/" + newData.id, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          auth: sesion.employment,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(response.statusText);
+      }
+
+      const data = await response.json();
+      console.log("Usuario eliminado con éxito:", data);
+      window.location.reload();
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
+  const editUser = async (userData) => {
+    const sesion = JSON.parse(sessionStorage.getItem("sesion"));
+    const newUser = {
+      name: userData.name,
+      email: userData.email,
+      pass: userData.password,
+      employment: userData.type,
+      phone: userData.phone,
+    };
+    try {
+      const response = await fetch(
+        "http://localhost:3000/user/" + editData.id,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            auth: sesion.employment,
+          },
+          body: JSON.stringify(newUser),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(response.statusText);
+      }
+
+      const data = await response.json();
+      console.log("Usuario editado con éxito:", data);
+      window.location.reload();
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
+  const handleEditSubmit = async (event) => {
+    event.preventDefault();
+    const newData = editData;
+    editUser(newData); // Llama a saveUser con los datos del formulario
+    setModalState2(false);
+    setEditData({
+      id: "",
+      name: "",
+      type: "Vendedor",
+      email: "",
+      password: "",
+      phone: "",
+    });
+  };
 
   return (
     <>
@@ -230,7 +354,104 @@ export default function Users() {
             <button
               type="submit"
               className="bottom-0 pt-3 pb-3 w-full bg-[#DFFDE1] rounded-md"
-            > Guardar usuario
+            >
+              {" "}
+              Guardar usuario
+            </button>
+          </div>
+        </form>
+      </Modal>
+      {/* Modal de edición de usuario */}
+      <Modal
+        modalState={modalState2}
+        changeModalState={setModalState2}
+        isMobile={isMobile}
+        setIsMobile={setIsMobile}
+        title="Modificar usuario"
+      >
+        <form
+          onSubmit={handleEditSubmit}
+          className="mt-10 text-md font-semibold"
+        >
+          <div className="p-1 mb-3">
+            <p className="mb-1">Nombre:</p>
+            <input
+              className={inputClasses}
+              type="text"
+              name="name"
+              value={editData.name}
+              onChange={(e) =>
+                setEditData({ ...editData, name: e.target.value })
+              }
+            />
+          </div>
+          <div className="p-1 mb-3">
+            <p className="mb-1"> Tipo:</p>
+            <select
+              name="type"
+              className={`${inputClasses} font-light`}
+              value="Vendedor"
+              onChange={(e) => setEditData({ ...editData, type: "Vendedor" })}
+            >
+              <option className="text-sm" value="Vendedor">
+                Vendedor
+              </option>
+            </select>
+          </div>
+          <div className="p-1 mb-3">
+            <p className="mb-1">Email:</p>
+            <input
+              className={inputClasses}
+              type="email"
+              id="emailInput"
+              name="email"
+              value={editData.email}
+              onChange={(e) =>
+                setEditData({ ...editData, email: e.target.value })
+              }
+            />
+          </div>
+          <div className="p-1 mb-3">
+            <p className="mb-1">Contraseña:</p>
+            <input
+              className={inputClasses}
+              type="password"
+              id="passwordInput"
+              name="password"
+              value={editData.password}
+              onChange={(e) =>
+                setEditData({ ...editData, password: e.target.value })
+              }
+            />
+          </div>
+          <div className="p-1 mb-3">
+            <p className="mb-1">Teléfono:</p>
+            <input
+              className={inputClasses}
+              type="tel"
+              id="phoneInput"
+              name="phone"
+              value={editData.phone}
+              onChange={(e) =>
+                setEditData({ ...editData, phone: e.target.value })
+              }
+            />
+          </div>
+          <div className="p-1 bottom-0 mt-6 absoulte items-center justify-items-center text-center ">
+            <button
+              type="submit"
+              className="bottom-0 pt-3 pb-3 w-full bg-[#ffbab5] rounded-md"
+              onClick={removeUser}
+            >
+              Eliminar usuario
+            </button>
+          </div>
+          <div className="p-1 bottom-0 mt-6 absoulte items-center justify-items-center text-center ">
+            <button
+              type="submit"
+              className="bottom-0 pt-3 pb-3 w-full bg-[#DFFDE1] rounded-md"
+            >
+              Guardar cambios
             </button>
           </div>
         </form>
@@ -324,13 +545,16 @@ export default function Users() {
                       >
                         {item.name}
                       </td>
-                      {isMobile && (
+                      {isMobile && item.employment != "Admin" && (
                         <td
                           className={`${
                             isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2 pr-4"
                           }`}
                         >
-                          <button className="bg-[#CCE1FE] pt-[3] pb-[3] pl-2 pr-2 rounded-xl">
+                          <button
+                            className="bg-[#CCE1FE] pt-[3] pb-[3] pl-2 pr-2 rounded-xl"
+                            onClick={() => handleEditModal(item._id)}
+                          >
                             <RiPencilFill />
                           </button>
                         </td>
@@ -356,9 +580,12 @@ export default function Users() {
                       >
                         {item.phone}
                       </td>
-                      {!isMobile && (
+                      {!isMobile && item.employment != "Admin" && (
                         <td className="pt-2 pr-4">
-                          <button className="bg-[#CCE1FE] pt-[3] pb-[3] pl-2 pr-2 rounded-xl">
+                          <button
+                            className="bg-[#CCE1FE] pt-[3] pb-[3] pl-2 pr-2 rounded-xl"
+                            onClick={() => handleEditModal(item._id)}
+                          >
                             <RiPencilFill />
                           </button>
                         </td>
