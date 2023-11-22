@@ -2,6 +2,11 @@
 import React, { useEffect } from "react";
 import Quagga from "quagga";
 
+const generateBarcode = () => {
+  const randomBarcode = Math.floor(Math.random() * 1000000000000).toString();
+  return randomBarcode;
+};
+
 const barcodeScanner = ({ onBarcodeRead }) => {
   useEffect(() => {
     Quagga.init(
@@ -36,7 +41,8 @@ const barcodeScanner = ({ onBarcodeRead }) => {
       })
         .then((response) => response.json())
         .then((data) => console.log(data.message, data.product))
-        .catch((error) => console.error('Error al verificar el código de barras en el servidor:', error));
+        .catch((error) => 
+          console.error("Error al verificar el código de barras en el servidor:", error));
     });
 
     initQuagga();
@@ -46,6 +52,9 @@ const barcodeScanner = ({ onBarcodeRead }) => {
       Quagga.stop();
     };
   }, [onBarcodeRead]);
+
+  const barcode = generateBarcode();
+  console.log("Generated Barcode:", barcode);
 
   return <div id="barcode-scanner" />;
 };
