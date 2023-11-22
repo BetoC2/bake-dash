@@ -17,20 +17,6 @@ export default function Users() {
     setCurrentPage("Usuarios");
   }, []);
 
-  // Responsive openning
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 1000);
-    };
-
-    window.addEventListener("resize", handleResize);
-    handleResize();
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
   // Togabble modal
   const [modalState, setModalState] = React.useState(false);
   const [modalState2, setModalState2] = React.useState(false);
@@ -412,6 +398,7 @@ export default function Users() {
             />
           </div>
           <div className="p-1 mb-3">
+            <br />
             <p className="mb-1">Contraseña:</p>
             <input
               className={inputClasses}
@@ -487,7 +474,7 @@ export default function Users() {
               <div className="relative w-full">
                 <input
                   type="text"
-                  placeholder="Buscar usuarios por nombre o ID"
+                  placeholder="Buscar usuarios por nombre"
                   className={`p-2 pl-8 w-full rounded-3xl ${
                     isMobile ? "text-md" : "text-lg"
                   } bg-main-white border-0`}

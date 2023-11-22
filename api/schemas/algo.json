@@ -1,0 +1,135 @@
+[
+  {
+    "imageURL": "https://raw.githubusercontent.com/BEARST-DEV-PANDA/bakeDash-images/main/borrego.png",
+    "name": "Borrego",
+    "description": "Pan suave y esponjoso con una cobertura crujiente de azúcar.",
+    "price": 20,
+    "barcode": "3410175720"
+  },
+  {
+    "imageURL": "https://raw.githubusercontent.com/BEARST-DEV-PANDA/bakeDash-images/main/conchablanca.png",
+    "name": "Concha Blanca",
+    "description": "Concha tradicional de pan dulce cubierta con un glaseado blanco.",
+    "price": 25,
+    "barcode": "3410175721"
+  },
+  {
+    "imageURL": "https://raw.githubusercontent.com/BEARST-DEV-PANDA/bakeDash-images/main/conchacafe.png",
+    "name": "Concha Cafe",
+    "description": "Concha tradicional de pan dulce con un tono café y textura esponjosa.",
+    "price": 30,
+    "barcode": "3410175722"
+  },
+  {
+    "imageURL": "https://raw.githubusercontent.com/BEARST-DEV-PANDA/bakeDash-images/main/conde.png",
+    "name": "Conde",
+    "description": "Pan con relleno dulce y decorado con líneas entrelazadas en la parte superior.",
+    "price": 15,
+    "barcode": "3410175723"
+  },
+  {
+    "imageURL": "https://raw.githubusercontent.com/BEARST-DEV-PANDA/bakeDash-images/main/conorelleno.png",
+    "name": "Cono Relleno",
+    "description": "Cono de pan relleno de crema.",
+    "price": 20,
+    "barcode": "3410175724"
+  },
+  {
+    "imageURL": "https://raw.githubusercontent.com/BEARST-DEV-PANDA/bakeDash-images/main/dona.png",
+    "name": "Dona",
+    "description": "Clásica dona de pan dulce con una cubierta de azúcar.",
+    "price": 25,
+    "barcode": "3410175725"
+  },
+  {
+    "imageURL": "https://raw.githubusercontent.com/BEARST-DEV-PANDA/bakeDash-images/main/galletadecereal.png",
+    "name": "Galleta de Cereal",
+    "description": "Galleta elaborada con cereales y una textura crujiente.",
+    "price": 30,
+    "barcode": "3410175726"
+  },
+  {
+    "imageURL": "https://raw.githubusercontent.com/BEARST-DEV-PANDA/bakeDash-images/main/galletadegrajea.png",
+    "name": "Galleta de Grajea",
+    "description": "Galleta cubierta con grajeas de colores.",
+    "price": 35,
+    "barcode": "3410175727"
+  },
+  {
+    "imageURL": "https://raw.githubusercontent.com/BEARST-DEV-PANDA/bakeDash-images/main/lima.png",
+    "name": "Lima",
+    "description": "Pan con costra crocante parecida a concha.",
+    "price": 15,
+    "barcode": "3410175728"
+  },
+  {
+    "imageURL": "https://raw.githubusercontent.com/BEARST-DEV-PANDA/bakeDash-images/main/mantecada.png",
+    "name": "Mantecada",
+    "description": "Pan dulce con sabor a mantequilla y una textura esponjosa.",
+    "price": 20,
+    "barcode": "3410175729"
+  },
+  {
+    "imageURL": "https://raw.githubusercontent.com/BEARST-DEV-PANDA/bakeDash-images/main/mono.png",
+    "name": "Moño",
+    "description": "Pan dulce con forma de moño decorado con azúcar glass.",
+    "price": 25,
+    "barcode": "3410175730"
+  },
+  {
+    "imageURL": "https://raw.githubusercontent.com/BEARST-DEV-PANDA/bakeDash-images/main/ojodebuey.png",
+    "name": "Ojo de Buey",
+    "description": "Pan dulce con una capa superior crujiente y un agujero en el centro.",
+    "price": 30,
+    "barcode": "3410175731"
+  },
+  {
+    "imageURL": "https://raw.githubusercontent.com/BEARST-DEV-PANDA/bakeDash-images/main/oreja.png",
+    "name": "Oreja",
+    "description": "Pan dulce en forma de oreja con capas finas y crujientes.",
+    "price": 20,
+    "barcode": "3410175732"
+  },
+  {
+    "imageURL": "https://raw.githubusercontent.com/BEARST-DEV-PANDA/bakeDash-images/main/pastaamarilla.png",
+    "name": "Pasta Amarilla",
+    "description": "Pan dulce con una capa amarilla de azúcar o mantequilla.",
+    "price": 22,
+    "barcode": "3410175733"
+  },
+  {
+    "imageURL": "https://raw.githubusercontent.com/BEARST-DEV-PANDA/bakeDash-images/main/payaso.png",
+    "name": "Payaso",
+    "description": "Pan dulce decorado con colores brillantes en forma de payaso.",
+    "price": 27,
+    "barcode": "3410175734"
+  },
+  {
+    "imageURL": "https://raw.githubusercontent.com/BEARST-DEV-PANDA/bakeDash-images/main/polvoron.png",
+    "name": "Polvorón",
+    "description": "Pan dulce desmigajado y suave con un toque de canela.",
+    "price": 29,
+    "barcode": "3410175735"
+  },
+  {
+    "imageURL": "https://raw.githubusercontent.com/BEARST-DEV-PANDA/bakeDash-images/main/riel.png",
+    "name": "Riel",
+    "description": "Pan alargado con surcos en su superficie.",
+    "price": 21,
+    "barcode": "3410175736"
+  },
+  {
+    "imageURL": "https://raw.githubusercontent.com/BEARST-DEV-PANDA/bakeDash-images/main/rielconazucar.png",
+    "name": "Riel con Azucar",
+    "description": "Pan alargado con surcos en su superficie y cubierto de azúcar.",
+    "price": 23,
+    "barcode": "3410175737"
+  },
+  {
+    "imageURL": "https://raw.githubusercontent.com/BEARST-DEV-PANDA/bakeDash-images/main/taco.png",
+    "name": "Taco",
+    "description": "Pan de forma alargada con una textura suave y esponjosa.",
+    "price": 25,
+    "barcode": "3410175738"
+  }
+]

@@ -41,3 +41,15 @@ Content-Type: application/json
     "email": "test@correo.com",
     "pass": "password"
 }
+
+###
+POST http://localhost:3000/product/
+Content-Type: application/json
+auth: Admin
+
+{
+    "imageURL": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.istockphoto.c",
+    "name": "test",
+    "description": "test",
+    "price": 100
+}

@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { barcodeGenerator } from "../libs/barcode.js";
 
 const productSchema = new mongoose.Schema({
   imageURL: {
@@ -19,6 +20,11 @@ const productSchema = new mongoose.Schema({
     type: Number,
     min: 0,
     required: true,
+  },
+  barcode: {
+    type: String,
+    required: false,
+    default: barcodeGenerator(10),
   },
 });
 

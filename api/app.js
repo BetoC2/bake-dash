@@ -3,6 +3,7 @@ import morgan from "morgan";
 import cors from "cors";
 import authRoutes from "./routes/auth_routes.js";
 import userRoutes from "./routes/user_routes.js";
+import productRoutes from "./routes/product_routes.js";
 const app = express();
 
 app.use(
@@ -16,5 +17,6 @@ app.use(express.json());
 
 app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
+app.use("/product", productRoutes);
 
 export default app;

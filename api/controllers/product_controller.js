@@ -1,5 +1,4 @@
 import Product from "../models/product_model.js";
-import barcodeScanner from '../barcodeScanner/BarcodeScanner';
 
 export const getAllProducts = async (req, res) => {
   try {
@@ -19,9 +18,7 @@ export const getProductById = async (req, res) => {
     if (!productFound) {
       return res.status(400).json({ message: "Product not found" });
     }
-    res.json({
-      productFound,
-    });
+    res.json([]);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -32,10 +29,25 @@ export const getProductsByName = async (req, res) => {
   try {
     const productsFound = await Product.find({ name: { $regex: name } });
     if (!productsFound) {
-      return res.status(400).json({ message: "Product not found" });
+      res.json([]);
     }
     res.json({
       productsFound,
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+export const getProductByBarcode = async (req, res) => {
+  const { barcode } = req.params;
+  try {
+    const userFound = await User.findOne({ barcode: barcode });
+    if (!userFound) {
+      return res.status(400).json({ message: "User not found" });
+    }
+    res.json({
+      userFound,
     });
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -60,11 +72,11 @@ export const removeProduct = async (req, res) => {
 
 export const updateProduct = async (req, res) => {
   const { id } = req.params;
-  const { name, price, category, image } = req.body;
+  const { imageURL, name, description, price } = req.body;
   try {
     const productUpdated = await Product.findByIdAndUpdate(
       id,
-      { name, price, category, image },
+      { imageURL, name, description, price },
       { new: true }
     );
     if (!productUpdated) {
@@ -80,13 +92,13 @@ export const updateProduct = async (req, res) => {
 };
 
 export const createProduct = async (req, res) => {
-  const { name, price, category, image } = req.body;
+  const { imageURL, name, description, price } = req.body;
   try {
     const newProduct = new Product({
+      imageURL,
       name,
+      description,
       price,
-      category,
-      image,
     });
     const productSaved = await newProduct.save();
     res.json({
@@ -97,7 +109,3 @@ export const createProduct = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
-
-export const readProduct = async (req, res) => {
-  
-}
