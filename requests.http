@@ -53,3 +53,30 @@ auth: Admin
     "description": "test",
     "price": 100
 }
+
+###
+POST http://localhost:3000/sale/
+Content-Type: application/json
+
+{
+  "products": [
+    {
+      "productId": "615a7cd3d36a63462e4e106e",
+      "quantity": 3,
+      "price": 25
+    },
+    {
+      "productId": "615a7cd3d36a63462e4e106f",
+      "quantity": 1,
+      "price": 50
+    }
+  ],
+  "datetime": "2023-11-22T08:00:00Z",
+  "vendor": "Nombre del vendedor",
+  "paymentMethod": "Efectivo",
+  "advance": 100,
+  "extraCost": 10,
+  "comments": "Comentario opcional",
+  "subtotal": 115,
+  "total": 125
+}
