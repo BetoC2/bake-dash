@@ -80,3 +80,6 @@ Content-Type: application/json
   "subtotal": 115,
   "total": 125
 }
+
+###
+GET http://localhost:3000/product/barcode/3410175721

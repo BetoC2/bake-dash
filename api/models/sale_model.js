@@ -3,10 +3,6 @@ import mongoose from "mongoose";
 const saleSchema = new mongoose.Schema({
   products: [
     {
-      productId: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-      },
       quantity: {
         type: Number,
         min: 1,
@@ -17,11 +13,15 @@ const saleSchema = new mongoose.Schema({
         min: 0,
         required: true,
       },
+      barcode: {
+        type: String,
+        required: true,
+      },
     },
   ],
   datetime: {
     type: Date,
-    required: true,
+    required: false,
     default: Date.now,
   },
   vendor: {

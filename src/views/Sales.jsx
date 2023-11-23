@@ -154,8 +154,13 @@ const inputClasses =
   "w-full bg-[#E6E6E6] border-0 rounded-md p-[6px] focus:outline-none focus:border-[#222222] focus:border-2";
 
 export default function Sales() {
-  //Set current page
+  const [products, setProducts] = useState([]); 
+  const [inputIdValue, setInputIdValue] = useState('');
   const [currentPage, setCurrentPage] = useState("Usuarios");
+  
+  useEffect(() => {
+    console.log(products);
+  }, [products]);
 
   useEffect(() => {
     setCurrentPage("Usuarios");
@@ -178,50 +183,145 @@ export default function Sales() {
   // Togabble modal
   const [modalState, setModalState] = React.useState(false);
 
-  // Search Bar
-  const [searchTerm, setSearchTerm] = useState("");
-  const handleSearch = (event) => {
-    console.log(event.target.value);
-    // TODO: buscar ventas
+  const handleSearch = async(event) => {
+    if (inputIdValue.trim() === "") {
+      alert("Input vacío");
+    } else {
+      await fetch(`http://localhost:3000/product/barcode/${inputIdValue}`)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(response.statusText);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          if (data) {
+          
+            alert(`Producto ${data.productFound.name} con barcode ${inputIdValue} encontrado`);
+            addProduct(data.productFound); 
+          } 
+        })
+        .catch((error) => {
+          alert('Producto no encontrado');
+          setInputIdValue('');
+        });
+    }
   };
 
-  const [productos, setProductos] = useState([]); // Estado para las tarjetas de productos
+  const addProduct = (data) => {
+    // Verificar si el ID ya existe en la lista de productos
+    const productIndex = products.findIndex(product => product.barcode === data.barcode);
+  
+    if (productIndex !== -1) {
+      // El producto ya existe, actualizamos la cantidad sumando 1
+      const updatedProducts = [...products];
+      updatedProducts[productIndex].quantity += 1;
+      setProducts(updatedProducts);
+      setInputIdValue('');
+    } else {
+      // El producto no existe, lo agregamos a la lista con cantidad 1
+      const newProduct = { quantity: 1, price: data.price, barcode: data.barcode };
+      setProducts(prevProducts => [...prevProducts, newProduct]);
+      setInputIdValue('');
+    }
+  };
+  
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault(); 
+      handleSearch();
 
-  const agregarProducto = () => {
-    const nuevoProducto = {
-      id: productos.length + 1,
-      cantidad: 0,
-    };
-
-    setProductos([...productos, nuevoProducto]);
+    }
   };
 
-  const eliminarProducto = (id) => {
-    const nuevosProductos = productos.filter((producto) => producto.id !== id);
-    setProductos(nuevosProductos);
+  const handleClick = (event) => {
+    event.preventDefault();
+    handleSearch();
   };
 
-  const decreaseCantidad = (id) => {
-    const nuevosProductos = productos.map((producto) => {
-      if (producto.id === id && producto.cantidad > 0) {
-        return { ...producto, cantidad: producto.cantidad - 1 };
+  const deleteProduct = (barcode) => {
+    const newProducts = products.filter((product) => product.barcode !== barcode);
+    setProducts(newProducts);
+  };
+
+  const decreaseQuantity = (barcode) => {
+    const newProducts = products.map((product) => {
+      if (product.barcode === barcode && product.quantity > 1) {
+        return { ...product, quantity: product.quantity - 1 };
       }
-      return producto;
+      return product;
     });
-
-    setProductos(nuevosProductos);
+  
+    setProducts(newProducts);
   };
-
-  const increaseCantidad = (id) => {
-    const nuevosProductos = productos.map((producto) => {
-      if (producto.id === id) {
-        return { ...producto, cantidad: producto.cantidad + 1 };
+  
+  const increaseQuantity = (barcode) => {
+    const newProducts = products.map((product) => {
+      if (product.barcode === barcode) {
+        return { ...product, quantity: product.quantity + 1 };
       }
-      return producto;
+      return product;
     });
-
-    setProductos(nuevosProductos);
+  
+    setProducts(newProducts);
   };
+  
+
+
+  //Create Sale
+  const [createSale, setCreateSale] = useState({
+    products: [], // Un arreglo para los productos, inicialmente vacío
+    vendor: "",
+    paymentMethod: "", // Asegúrate de establecer esto correctamente a "Efectivo" o "Tarjeta"
+    advance: 0,
+    extraCost: 0,
+    comments: "",
+    subtotal: 0,
+    total: 0,
+  });
+
+  // crear producto
+  const handleCreateSubmit = async () => {
+    const data = createSale;
+    setCreateSale({
+      products: [], // Un arreglo para los productos, inicialmente vacío
+    vendor: "",
+    paymentMethod: "", // Asegúrate de establecer esto correctamente a "Efectivo" o "Tarjeta"
+    advance: 0,
+    extraCost: 0,
+    comments: "",
+    subtotal: 0,
+    total: 0,
+    });
+    setCreateModal(false);
+    if (!data.imageURL || !data.name || !data.description || !data.price) {
+      alert("Por favor, rellene todos los campos");
+      return window.location.reload();
+    }
+    if (parseInt(data.price) <= 0) {
+      alert("Precio invalido");
+      return window.location.reload();
+    }
+    const sesion = JSON.parse(sessionStorage.getItem("sesion"));
+    try {
+      const response = await fetch("http://localhost:3000/product/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          auth: sesion.employment,
+        },
+        body: JSON.stringify(data),
+      });
+      if (!response.ok) {
+        throw new Error(data.statusText);
+      }
+      window.location.reload();
+    } catch (error) {
+      alert(error);
+    }
+  };
+
+
 
   return (
     <>
@@ -238,40 +338,47 @@ export default function Sales() {
           <div className="p-1 mb-3 relative">
             <p className="mb-1">Productos</p>
             <div className="relative">
-              <input type="text" placeholder="Ingrese el id del producto" className={`relative ${inputClasses}`} />
+              <input
+                type="text"
+                placeholder="Ingrese el barcode del producto"
+                className={`relative ${inputClasses}`}
+                value={inputIdValue}
+                onChange={(e) => setInputIdValue(e.target.value)}
+                onKeyDown={handleKeyDown}
+              />
               <RiAddLine
                 className="absolute right-3 top-0 pt-2 text-3xl cursor-pointer"
-                onClick={agregarProducto}
+                onClick={handleClick}
               />
             </div>
 
 
             {/* Mostrar las tarjetas de productos */}
-            {productos.map((producto) => (
+            {products.map((product) => (
               <div
                 className="w-full bg-main-dark mt-4 flex items-center justify-between px-4 py-2 rounded-md"
-                key={producto.id}
+                key={product.barcode}
               >
-                <h4 className="text-main-white text-sm">Producto {producto.id}</h4>
+                <h4 className="text-main-white text-sm">{product.barcode}</h4>
                 <div className="flex items-center ml-auto mr-4">
                   <IoChevronBack
                     className="text-white mr-2 cursor-pointer"
-                    onClick={() => decreaseCantidad(producto.id)}
+                    onClick={() => decreaseQuantity(product.barcode)}
                   />
                   <input
                     type="text"
-                    value={producto.cantidad}
+                    value={product.quantity}
                     className="border px-2 py-1 rounded-md focus:outline-none w-12"
                     readOnly
                   />
                   <IoChevronForward
                     className="text-white ml-2 cursor-pointer"
-                    onClick={() => increaseCantidad(producto.id)}
+                    onClick={() => increaseQuantity(product.barcode)}
                   />
                 </div>
                 <IoTrashBin
                   className="text-white cursor-pointer text-2xl"
-                  onClick={() => eliminarProducto(producto.id)}
+                  onClick={() => deleteProduct(product.barcode)}
                 />
               </div>
             ))}
@@ -298,7 +405,7 @@ export default function Sales() {
             <p className="mb-1">Anticipo</p>
             <input
               className={inputClasses}
-              value="$ 210.00"
+              value=""
               type="text"
               id="AnticipoInput"
               name="anticipo"
