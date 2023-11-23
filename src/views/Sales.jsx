@@ -238,12 +238,12 @@ export default function Sales() {
           <div className="p-1 mb-3 relative">
             <p className="mb-1">Productos</p>
             <div className="relative">
-  <input type="text" placeholder="Ingrese el id del producto" className={`relative ${inputClasses}`} />
-  <RiAddLine
-    className="absolute right-3 top-0 pt-2 text-3xl cursor-pointer"
-    onClick={agregarProducto}
-  />
-</div>
+              <input type="text" placeholder="Ingrese el id del producto" className={`relative ${inputClasses}`} />
+              <RiAddLine
+                className="absolute right-3 top-0 pt-2 text-3xl cursor-pointer"
+                onClick={agregarProducto}
+              />
+            </div>
 
 
             {/* Mostrar las tarjetas de productos */}
