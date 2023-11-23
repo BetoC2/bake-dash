@@ -429,7 +429,7 @@ function Products() {
               <img
                 src={item.imageURL}
                 alt={item.name}
-                className="object-cover w-full h-3/4 rounded-xl"
+                className="object-contain w-full h-3/4 rounded-xl"
                 onClick={() => handleEditModal(item._id)}
               />
               <p className="text-center mt-2 text-sm ">{item.name}</p>
