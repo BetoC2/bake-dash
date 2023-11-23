@@ -413,7 +413,6 @@ export default function Users() {
             />
           </div>
           <div className="p-1 mb-3">
-            <br />
             <p className="mb-1">Contraseña:</p>
             <input
               className={inputClasses}
