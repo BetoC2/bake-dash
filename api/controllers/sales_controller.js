@@ -67,17 +67,25 @@ export const updateSale = async (req, res) => {
 
 //CREATE SALE
 export const createSale = async (req, res) => {
-    const { products, vendor, paymentMethod, advance, extraCost, comments, subtotal, total  } = req.body;
-    try {
-      const newSale = new Sale({
-        products, vendor, paymentMethod, advance, extraCost, comments, subtotal, total
-      });
-      const saleSaved = await newSale.save();
-      res.json({
-        message: "Sale saved successfully",
-        saleSaved,
-      });
-    } catch (err) {
-      res.status(500).json({ message: err.message });
-    }
-  };
+  const { products, vendor, paymentMethod, advance, extraCost, comments, subtotal, total } = req.body;
+  try {
+    const newSale = new Sale({
+      products,
+      vendor,
+      paymentMethod,
+      advance,
+      extraCost,
+      comments,
+      subtotal,
+      total,
+    });
+    const saleSaved = await newSale.save();
+    res.json({
+      message: "Sale saved successfully",
+      saleSaved,
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+

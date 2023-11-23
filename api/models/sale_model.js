@@ -3,6 +3,14 @@ import mongoose from "mongoose";
 const saleSchema = new mongoose.Schema({
   products: [
     {
+      barcode: {
+        type: String,
+        required: true,
+      },
+      name: {
+        type: String,
+        required: true,
+      },
       quantity: {
         type: Number,
         min: 1,
@@ -12,11 +20,7 @@ const saleSchema = new mongoose.Schema({
         type: Number,
         min: 0,
         required: true,
-      },
-      barcode: {
-        type: String,
-        required: true,
-      },
+      }
     },
   ],
   datetime: {

@@ -154,10 +154,10 @@ const inputClasses =
   "w-full bg-[#E6E6E6] border-0 rounded-md p-[6px] focus:outline-none focus:border-[#222222] focus:border-2";
 
 export default function Sales() {
-  const [products, setProducts] = useState([]); 
+  const [products, setProducts] = useState([]);
   const [inputIdValue, setInputIdValue] = useState('');
   const [currentPage, setCurrentPage] = useState("Usuarios");
-  
+
   useEffect(() => {
     console.log(products);
   }, [products]);
@@ -183,7 +183,7 @@ export default function Sales() {
   // Togabble modal
   const [modalState, setModalState] = React.useState(false);
 
-  const handleSearch = async(event) => {
+  const handleSearch = async (event) => {
     if (inputIdValue.trim() === "") {
       alert("Input vacío");
     } else {
@@ -196,10 +196,10 @@ export default function Sales() {
         })
         .then((data) => {
           if (data) {
-          
+
             alert(`Producto ${data.productFound.name} con barcode ${inputIdValue} encontrado`);
-            addProduct(data.productFound); 
-          } 
+            addProduct(data.productFound);
+          }
         })
         .catch((error) => {
           alert('Producto no encontrado');
@@ -211,7 +211,7 @@ export default function Sales() {
   const addProduct = (data) => {
     // Verificar si el ID ya existe en la lista de productos
     const productIndex = products.findIndex(product => product.barcode === data.barcode);
-  
+
     if (productIndex !== -1) {
       // El producto ya existe, actualizamos la cantidad sumando 1
       const updatedProducts = [...products];
@@ -220,15 +220,15 @@ export default function Sales() {
       setInputIdValue('');
     } else {
       // El producto no existe, lo agregamos a la lista con cantidad 1
-      const newProduct = { quantity: 1, price: data.price, barcode: data.barcode };
+      const newProduct = { barcode: data.barcode, name: data.name, quantity: 1, price: data.price };
       setProducts(prevProducts => [...prevProducts, newProduct]);
       setInputIdValue('');
     }
   };
-  
+
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
-      event.preventDefault(); 
+      event.preventDefault();
       handleSearch();
 
     }
@@ -251,10 +251,10 @@ export default function Sales() {
       }
       return product;
     });
-  
+
     setProducts(newProducts);
   };
-  
+
   const increaseQuantity = (barcode) => {
     const newProducts = products.map((product) => {
       if (product.barcode === barcode) {
@@ -262,64 +262,94 @@ export default function Sales() {
       }
       return product;
     });
-  
+
     setProducts(newProducts);
   };
+
+
+
+  const [paymentMethod, setPaymentMethod] = useState('');
+  const [advance, setAdvance] = useState('');
+  const [extraCost, setExtraCost] = useState('');
+  const [comments, setComments] = useState('');
+  // ... otros estados para los valores del formulario
+
+  // Funciones para actualizar el estado cuando los valores cambian en los inputs
+  const handlePaymentMethodChange = (event) => {
+    setPaymentMethod(event.target.value);
+  };
+
+  const handleAdvanceChange = (event) => {
+    const value = parseFloat(event.target.value);
+    setAdvance(isNaN(value) ? '' : value);
+  };
   
+  const handleExtraCostChange = (event) => {
+    const value = parseFloat(event.target.value);
+    setExtraCost(isNaN(value) ? '' : value);
+  };
+
+  const handleCommentsChange = (event) => {
+    setComments(event.target.value);
+  };
+
+  const calculateTotal = () => {
+    const productsTotal = products.reduce((total, product) => {
+      return total + product.price * product.quantity;
+    }, 0);
+  
+    const total = productsTotal + extraCost - advance;
+    return total;
+  };
 
 
-  //Create Sale
-  const [createSale, setCreateSale] = useState({
-    products: [], // Un arreglo para los productos, inicialmente vacío
-    vendor: "",
-    paymentMethod: "", // Asegúrate de establecer esto correctamente a "Efectivo" o "Tarjeta"
-    advance: 0,
-    extraCost: 0,
-    comments: "",
-    subtotal: 0,
-    total: 0,
-  });
-
-  // crear producto
   const handleCreateSubmit = async () => {
-    const data = createSale;
-    setCreateSale({
-      products: [], // Un arreglo para los productos, inicialmente vacío
-    vendor: "",
-    paymentMethod: "", // Asegúrate de establecer esto correctamente a "Efectivo" o "Tarjeta"
-    advance: 0,
-    extraCost: 0,
-    comments: "",
-    subtotal: 0,
-    total: 0,
-    });
-    setCreateModal(false);
-    if (!data.imageURL || !data.name || !data.description || !data.price) {
-      alert("Por favor, rellene todos los campos");
-      return window.location.reload();
-    }
-    if (parseInt(data.price) <= 0) {
-      alert("Precio invalido");
-      return window.location.reload();
-    }
-    const sesion = JSON.parse(sessionStorage.getItem("sesion"));
+    const saleData = {
+      products: products,
+      vendor: "Nombre del vendedor", // Esto también puede venir de un campo del formulario
+      paymentMethod: paymentMethod,
+      advance: advance,
+      extraCost: extraCost, // Esto puede ser otro campo del formulario
+      comments: comments,
+      subtotal: 0, // Esto puede ser otro campo del formulario
+      total: 0, // Esto puede ser otro campo del formulario
+    };
+
     try {
-      const response = await fetch("http://localhost:3000/product/", {
-        method: "POST",
+      const response = await fetch('http://localhost:3000/sale/', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
-          auth: sesion.employment,
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(saleData),
       });
+
       if (!response.ok) {
-        throw new Error(data.statusText);
+        throw new Error('Error al enviar la solicitud');
       }
-      window.location.reload();
+
+      // Manejar la respuesta si es necesario
+      const responseData = await response.json();
+      console.log('Venta creada exitosamente:', responseData);
+
+      // Restablecer los campos del formulario después de la venta
+      setProducts([]); // Limpiar la lista de productos
+      setPaymentMethod(''); // Restablecer el método de pago
+      setAdvance(''); // Restablecer el anticipo
+      setExtraCost('');
+      setComments(''); // Restablecer los comentarios
+      // ... Restablecer otros campos si es necesario
+
+      // Mostrar mensaje o redireccionar después de crear la venta
+      alert('Venta creada exitosamente');
+      // O redirigir a otra página
+      // history.push('/otra-ruta');
     } catch (error) {
-      alert(error);
+      console.error('Error al crear la venta:', error);
+      alert('Error al crear la venta. Por favor, inténtalo de nuevo');
     }
   };
+
 
 
 
@@ -333,7 +363,7 @@ export default function Sales() {
         setIsMobile={setIsMobile}
         title="Nueva venta"
       >
-        <form onSubmit="" className="mt-10 text-md font-semibold">
+        <form onSubmit={handleCreateSubmit} className="mt-10 text-md font-semibold">
           {/* Productos */}
           <div className="p-1 mb-3 relative">
             <p className="mb-1">Productos</p>
@@ -359,7 +389,7 @@ export default function Sales() {
                 className="w-full bg-main-dark mt-4 flex items-center justify-between px-4 py-2 rounded-md"
                 key={product.barcode}
               >
-                <h4 className="text-main-white text-sm">{product.barcode}</h4>
+                <h4 className="text-main-white text-sm">{product.name}</h4>
                 <div className="flex items-center ml-auto mr-4">
                   <IoChevronBack
                     className="text-white mr-2 cursor-pointer"
@@ -389,6 +419,8 @@ export default function Sales() {
               id="products"
               name="type"
               className={`${inputClasses} font-light`}
+              value={paymentMethod}
+              onChange={handlePaymentMethodChange}
             >
               <option className="text-sm" value="">
                 Seleccionar método
@@ -405,10 +437,22 @@ export default function Sales() {
             <p className="mb-1">Anticipo</p>
             <input
               className={inputClasses}
-              value=""
               type="text"
               id="AnticipoInput"
               name="anticipo"
+              value={advance}
+              onChange={handleAdvanceChange}
+            />
+          </div>
+          <div className="p-1 mb-3">
+            <p className="mb-1">Costo extra</p>
+            <input
+              className={inputClasses}
+              type="text"
+              id="costoExtraInput"
+              name="costoExtra"
+              value={extraCost}
+              onChange={handleExtraCostChange}
             />
           </div>
           <div className="p-1 mb-3">
@@ -418,11 +462,13 @@ export default function Sales() {
               type="text"
               id="comentariosInput"
               name="comentarios"
+              value={comments}
+              onChange={handleCommentsChange}
             />
           </div>
           <div className="p-1">
             <p className="mb-1">Total</p>
-            <p className="text-xl">$ 510</p>
+            <p className="text-xl">$ {calculateTotal()}</p>
           </div>
           <div className="p-1 bottom-0 mt-2 absoulte items-center justify-items-center text-center ">
             <button

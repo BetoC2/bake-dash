@@ -61,17 +61,18 @@ Content-Type: application/json
 {
   "products": [
     {
-      "productId": "615a7cd3d36a63462e4e106e",
+      "barcode": "1234567892",
+      "name": "Pan de muerto",
       "quantity": 3,
       "price": 25
     },
     {
-      "productId": "615a7cd3d36a63462e4e106f",
-      "quantity": 1,
-      "price": 50
+      "barcode": "1234567891",
+      "name": "Rosca de Reyes",
+      "quantity": 2,
+      "price": 102
     }
   ],
-  "datetime": "2023-11-22T08:00:00Z",
   "vendor": "Nombre del vendedor",
   "paymentMethod": "Efectivo",
   "advance": 100,
@@ -80,6 +81,7 @@ Content-Type: application/json
   "subtotal": 115,
   "total": 125
 }
+
 
 ###
 GET http://localhost:3000/product/barcode/3410175721
