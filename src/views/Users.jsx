@@ -121,37 +121,42 @@ export default function Users() {
     });
   };
 
-  const saveUser = async (userData) => {
-    const newUser = {
-      name: userData.name,
-      email: userData.email,
-      pass: userData.password,
-      employment: userData.type,
-      phone: userData.phone,
-    };
-    try {
-      const sesion = JSON.parse(sessionStorage.getItem("sesion"));
-      console.log(sesion.employment);
-      const response = await fetch("http://localhost:3000/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          auth: sesion.employment,
-        },
-        body: JSON.stringify(newUser),
-      });
+   
+const saveUser = async (userData) => {
+  try {
+    const { name, email, password, type: employment, phone } = userData;
+    const sesion = JSON.parse(sessionStorage.getItem("sesion"));
+    console.log(sesion.employment);
 
-      if (!response.ok) {
-        throw new Error(response.statusText);
-      }
+    const response = await fetch("http://localhost:3000/auth/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        auth: sesion.employment,
+      },
+      body: JSON.stringify({
+        name,
+        email,
+        pass: password,
+        employment,
+        phone,
+      }),
+    });
 
-      const data = await response.json();
-      console.log("Usuario guardado con éxito:", data);
-      window.location.reload();
-    } catch (error) {
-      alert(error.message);
+    if (!response.ok) {
+      throw new Error(response.statusText);
     }
-  };
+
+    const data = await response.json();
+
+    console.log("Usuario guardado con éxito:", data);
+
+    window.location.reload();
+  } catch (error) {
+    alert(error.message);
+  }
+};
+
   // Modal 2
   // edición de usuario
   const [editData, setEditData] = useState({
