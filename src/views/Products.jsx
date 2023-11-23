@@ -69,6 +69,14 @@ function Products() {
       price: "",
     });
     setCreateModal(false);
+    if (!data.imageURL || !data.name || !data.description || !data.price) {
+      alert("Por favor, rellene todos los campos");
+      return window.location.reload();
+    }
+    if (parseInt(data.price) <= 0) {
+      alert("Precio invalido");
+      return window.location.reload();
+    }
     const sesion = JSON.parse(sessionStorage.getItem("sesion"));
     try {
       const response = await fetch("http://localhost:3000/product/", {
@@ -170,6 +178,14 @@ function Products() {
     };
     const sesion = JSON.parse(sessionStorage.getItem("sesion"));
     setEditModal(false);
+    if (!data.imageURL || !data.name || !data.description || !data.price) {
+      alert("Por favor, rellene todos los campos");
+      return window.location.reload();
+    }
+    if (parseInt(data.price) <= 0) {
+      alert("Precio invalido");
+      return window.location.reload();
+    }
     try {
       const response = await fetch("http://localhost:3000/product/" + id, {
         method: "PUT",
