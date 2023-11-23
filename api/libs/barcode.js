@@ -1,11 +1,13 @@
-export const barcodeGenerator = (longitud) => {
-  var caracteres = "0123456789";
-  var codigo = "";
 
-  for (var i = 0; i < longitud; i++) {
-    var indice = Math.floor(Math.random() * caracteres.length);
-    codigo += caracteres.charAt(indice);
+export const barcodeGenerator = (size) => {
+  var characters = "0123456789";
+  var code = "";
+
+  for(var i = 0; i < size; i++){
+    var index = Math.floor(Math.random() * characters.length);
+    code += characters.charAt(index);
   }
 
-  return codigo;
+  return code;
 };
+
