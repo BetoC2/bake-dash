@@ -195,7 +195,8 @@ export default function Users() {
   };
 
   const removeUser = async () => {
-    const newData = editData;
+    //const newData = editData;
+    const userToDelete = { ...editData }; // Evitar mutaciones
     setModalState2(false);
     setEditData({
       id: "",
@@ -222,6 +223,7 @@ export default function Users() {
       const data = await response.json();
       console.log("Usuario eliminado con éxito:", data);
       window.location.reload();
+
     } catch (error) {
       alert(error.message);
     }
