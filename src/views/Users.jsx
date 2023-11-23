@@ -121,42 +121,37 @@ export default function Users() {
     });
   };
 
-   
-const saveUser = async (userData) => {
-  try {
-    const { name, email, password, type: employment, phone } = userData;
-    const sesion = JSON.parse(sessionStorage.getItem("sesion"));
-    console.log(sesion.employment);
+  const saveUser = async (userData) => {
+    const newUser = {
+      name: userData.name,
+      email: userData.email,
+      pass: userData.password,
+      employment: userData.type,
+      phone: userData.phone,
+    };
+    try {
+      const sesion = JSON.parse(sessionStorage.getItem("sesion"));
+      console.log(sesion.employment);
+      const response = await fetch("http://localhost:3000/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          auth: sesion.employment,
+        },
+        body: JSON.stringify(newUser),
+      });
 
-    const response = await fetch("http://localhost:3000/auth/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        auth: sesion.employment,
-      },
-      body: JSON.stringify({
-        name,
-        email,
-        pass: password,
-        employment,
-        phone,
-      }),
-    });
+      if (!response.ok) {
+        throw new Error(response.statusText);
+      }
 
-    if (!response.ok) {
-      throw new Error(response.statusText);
+      const data = await response.json();
+      console.log("Usuario guardado con éxito:", data);
+      window.location.reload();
+    } catch (error) {
+      alert(error.message);
     }
-
-    const data = await response.json();
-
-    console.log("Usuario guardado con éxito:", data);
-
-    window.location.reload();
-  } catch (error) {
-    alert(error.message);
-  }
-};
-
+  };
   // Modal 2
   // edición de usuario
   const [editData, setEditData] = useState({
@@ -198,10 +193,8 @@ const saveUser = async (userData) => {
       alert(error.message);
     }
   };
-
   const removeUser = async () => {
-    //const newData = editData;
-    const userToDelete = { ...editData }; // Evitar mutaciones
+    const userToDelete = { ...editData }; // Avoid mutations
     setModalState2(false);
     setEditData({
       id: "",
@@ -211,28 +204,30 @@ const saveUser = async (userData) => {
       password: "",
       phone: "",
     });
+  
     const sesion = JSON.parse(sessionStorage.getItem("sesion"));
+  
     try {
-      const response = await fetch("http://localhost:3000/user/" + newData.id, {
+      const response = await fetch("http://localhost:3000/user/" + userToDelete.id, { // Correct id
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
           auth: sesion.employment,
         },
       });
-
-      if (!response.ok) {
+  
+      if(!response.ok){
         throw new Error(response.statusText);
       }
-
+  
       const data = await response.json();
       console.log("Usuario eliminado con éxito:", data);
       window.location.reload();
-
     } catch (error) {
       alert(error.message);
     }
   };
+  
 
   const editUser = async (userData) => {
     const sesion = JSON.parse(sessionStorage.getItem("sesion"));
