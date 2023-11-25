@@ -40,12 +40,12 @@ const saleSchema = new mongoose.Schema({
   advance: {
     type: Number,
     min: 0,
-    required: true,
+    required: false,
   },
   extraCost: {
     type: Number,
     min: 0,
-    required: true,
+    required: false,
   },
   comments: {
     type: String,

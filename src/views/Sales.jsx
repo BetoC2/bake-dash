@@ -441,7 +441,7 @@ export default function Sales() {
             </select>
           </div>
           <div className="p-1 mb-3">
-            <p className="mb-1">Anticipo</p>
+            <p className="mb-1">Descuento ($)</p>
             <input
               className={inputClasses}
               type="text"
@@ -452,7 +452,7 @@ export default function Sales() {
             />
           </div>
           <div className="p-1 mb-3">
-            <p className="mb-1">Costo extra</p>
+            <p className="mb-1">Costo extra ($)</p>
             <input
               className={inputClasses}
               type="text"
@@ -544,7 +544,7 @@ export default function Sales() {
                   }
                 >
                   <tr className={`${isMobile ? "m-2" : "p-4"}`}>
-                    <th>ID</th>
+                    <th></th>
                     <th>Fecha</th>
                     {isMobile && <th></th>}
                     <th>Valor</th>
