@@ -281,23 +281,27 @@ export default function Sales() {
 
   const handleAdvanceChange = (event) => {
     const value = parseFloat(event.target.value);
-    setAdvance(isNaN(value) ? '' : value);
+    setAdvance(isNaN(value) ? 0 : value); // Ensure it's a number or default to 0
   };
   
   const handleExtraCostChange = (event) => {
     const value = parseFloat(event.target.value);
-    setExtraCost(isNaN(value) ? '' : value);
+    setExtraCost(isNaN(value) ? 0 : value); // Ensure it's a number or default to 0
   };
 
   const handleCommentsChange = (event) => {
     setComments(event.target.value);
   };
 
-  const calculateTotal = () => {
+  const calculateSubtotal = () => {
     const productsTotal = products.reduce((total, product) => {
       return total + product.price * product.quantity;
     }, 0);
+    return productsTotal;
+  };
   
+  const calculateTotal = () => {
+    const productsTotal = calculateSubtotal(); // Reuse the subtotal calculation
     const total = productsTotal + extraCost - advance;
     return total;
   };
@@ -305,16 +309,22 @@ export default function Sales() {
 
   const handleCreateSubmit = async () => {
     const saleData = {
-      products: products,
-      vendor: "Nombre del vendedor", // Esto también puede venir de un campo del formulario
+      products: products.map(product => ({
+        barcode: product.barcode,
+        name: product.name,
+        quantity: product.quantity,
+        price: product.price
+      })),
+      vendor: "Nombre del vendedor", // You might replace this with actual vendor data
       paymentMethod: paymentMethod,
       advance: advance,
-      extraCost: extraCost, // Esto puede ser otro campo del formulario
+      extraCost: extraCost,
       comments: comments,
-      subtotal: 0, // Esto puede ser otro campo del formulario
-      total: 0, // Esto puede ser otro campo del formulario
+      subtotal: calculateSubtotal(),
+      total: calculateTotal(),
     };
-
+    console.log(saleData);
+  
     try {
       const response = await fetch('http://localhost:3000/sale/', {
         method: 'POST',
@@ -323,32 +333,29 @@ export default function Sales() {
         },
         body: JSON.stringify(saleData),
       });
-
+  
       if (!response.ok) {
         throw new Error('Error al enviar la solicitud');
       }
-
-      // Manejar la respuesta si es necesario
+  
       const responseData = await response.json();
       console.log('Venta creada exitosamente:', responseData);
-
-      // Restablecer los campos del formulario después de la venta
-      setProducts([]); // Limpiar la lista de productos
-      setPaymentMethod(''); // Restablecer el método de pago
-      setAdvance(''); // Restablecer el anticipo
+  
+      // Resetting form fields
+      setProducts([]);
+      setPaymentMethod('');
+      setAdvance('');
       setExtraCost('');
-      setComments(''); // Restablecer los comentarios
-      // ... Restablecer otros campos si es necesario
-
-      // Mostrar mensaje o redireccionar después de crear la venta
+      setComments('');
+  
       alert('Venta creada exitosamente');
-      // O redirigir a otra página
-      // history.push('/otra-ruta');
+      // Redirect or show a success message as needed
     } catch (error) {
       console.error('Error al crear la venta:', error);
       alert('Error al crear la venta. Por favor, inténtalo de nuevo');
     }
   };
+  
 
 
 
