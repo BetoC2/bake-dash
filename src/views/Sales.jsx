@@ -281,20 +281,20 @@ export default function Sales() {
 
   const handleAdvanceChange = (event) => {
     let value = event.target.value;
-    
+
     value = value === null || value === undefined ? 0 : value.trim();
-  
+
     setAdvance(value === null ? 0 : parseFloat(value));
   };
-  
+
   const handleExtraCostChange = (event) => {
     let value = event.target.value;
-  
+
     value = value === null || value === undefined ? 0 : value.trim();
-  
+
     setExtraCost(value === null ? 0 : parseFloat(value)); // Establecer en 0 si está vacío, de lo contrario, convertir a flotante
   };
-  
+
 
   const handleCommentsChange = (event) => {
     setComments(event.target.value);
@@ -306,9 +306,9 @@ export default function Sales() {
     }, 0);
     return productsTotal;
   };
-  
+
   const calculateTotal = () => {
-    const productsTotal = calculateSubtotal(); 
+    const productsTotal = calculateSubtotal();
     const total = productsTotal + extraCost - advance;
     return total;
   };
@@ -321,7 +321,7 @@ export default function Sales() {
       alert(validationResult.message);
       return;
     }
-  
+
     const saleData = {
       products: products.map(product => ({
         barcode: product.barcode,
@@ -330,7 +330,7 @@ export default function Sales() {
         price: product.price
       })),
       vendor: {
-        id: sesion.id, 
+        id: sesion.id,
         name: sesion.name
       },
       paymentMethod: paymentMethod,
@@ -341,7 +341,7 @@ export default function Sales() {
       total: calculateTotal(),
     };
     console.log(saleData);
-  
+
     try {
       response = await fetch('http://localhost:3000/sale/', {
         method: 'POST',
@@ -368,7 +368,7 @@ export default function Sales() {
       }
     }
   };
-  
+
   const validateFields = () => {
     if (products.length === 0) {
       return {
@@ -393,7 +393,7 @@ export default function Sales() {
 
     return { valid: true };
   };
-  
+
   const clearFields = () => {
     setProducts([]);
     setPaymentMethod('');
@@ -418,11 +418,11 @@ export default function Sales() {
       console.error(error);
     }
   };
-  
+
   useEffect(() => {
     fetchSalesData();
   }, []);
-  
+
   //Format Date Time
   const formatDateTime = dateTimeString => {
     const dateTime = new Date(dateTimeString);
@@ -432,15 +432,15 @@ export default function Sales() {
     const formattedTime = `${addZero(dateTime.getHours())}:${addZero(
       dateTime.getMinutes()
     )}`;
-  
+
     return `${formattedDate} ${formattedTime}`;
   };
-  
+
   const addZero = value => {
     return value < 10 ? `0${value}` : value;
   };
-  
-  
+
+
 
   return (
     <>
@@ -631,63 +631,69 @@ export default function Sales() {
                     {isMobile && <th></th>}
                     <th>Total</th>
                     <th>Vendedor</th>
-                    <th>Método</th>
+                    <th>Método de pago</th>
                     {!isMobile && <th></th>}
                   </tr>
                 </thead>
                 <tbody className="font-semibold">
-                  {sales.filter(sale => sale.vendor[0].id === sesion.id) // Filtrar las ventas por el nombre del vendedor
-                        .map((sale, index)=> (
-                    <tr key={index} className="p-1">
-                      <td
-                        className={`${isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2"
-                          }`}
-                      >
-                        {sale._id}
-                      </td>
-                      <td
-                        className={`${isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2"
-                          }`}
-                      >
-                        {formatDateTime(sale.datetime)}
-                      </td>
-                      {isMobile && (
+                  {sales
+                    .filter(sale => sale.vendor[0].id === sesion.id) 
+                    .sort((a, b) => {
+                      const dateA = new Date(a.datetime).getTime();
+                      const dateB = new Date(b.datetime).getTime();
+                      return dateB - dateA;
+                    })
+                    .map((sale, index) => (
+                      <tr key={index} className="p-1">
                         <td
-                          className={`${isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2 pr-4"
+                          className={`${isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2"
                             }`}
                         >
-                          <button className="bg-[#E0D9F2] pt-[3] pb-[3] pl-2 pr-2 rounded-xl">
-                            <FaEye />
-                          </button>
+                          {sale._id}
                         </td>
-                      )}
-                      <td
-                        className={`${isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2"
-                          }`}
-                      >
-                        ${sale.total}
-                      </td>
-                      <td
-                        className={`${isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2"
-                          }`}
-                      >
-                        {sale.vendor[0].name}
-                      </td>
-                      <td
-                        className={`${isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2"
-                          }`}
-                      >
-                        {sale.paymentMethod}
-                      </td>
-                      {!isMobile && (
-                        <td className="pt-2 pr-4">
-                          <button className="bg-[#E0D9F2] pt-[3] pb-[3] pl-2 pr-2 rounded-xl">
-                            <FaEye />
-                          </button>
+                        <td
+                          className={`${isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2"
+                            }`}
+                        >
+                          {formatDateTime(sale.datetime)}
                         </td>
-                      )}
-                    </tr>
-                  ))}
+                        {isMobile && (
+                          <td
+                            className={`${isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2 pr-4"
+                              }`}
+                          >
+                            <button className="bg-[#E0D9F2] pt-[3] pb-[3] pl-2 pr-2 rounded-xl">
+                              <FaEye />
+                            </button>
+                          </td>
+                        )}
+                        <td
+                          className={`${isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2"
+                            }`}
+                        >
+                          ${sale.total}
+                        </td>
+                        <td
+                          className={`${isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2"
+                            }`}
+                        >
+                          {sale.vendor[0].name}
+                        </td>
+                        <td
+                          className={`${isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2"
+                            }`}
+                        >
+                          {sale.paymentMethod}
+                        </td>
+                        {!isMobile && (
+                          <td className="pt-2 pr-4">
+                            <button className="bg-[#E0D9F2] pt-[3] pb-[3] pl-2 pr-2 rounded-xl">
+                              <FaEye />
+                            </button>
+                          </td>
+                        )}
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             </div>
