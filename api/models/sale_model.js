@@ -28,10 +28,18 @@ const saleSchema = new mongoose.Schema({
     required: false,
     default: Date.now,
   },
-  vendor: {
-    type: String,
-    required: true,
-  },
+  vendor: [
+    {
+      id: {
+        type: String,
+        required: true,
+      },
+      name: {
+        type: String,
+        required: true,
+      },
+    }
+  ],
   paymentMethod: {
     type: String,
     enum: ["Efectivo", "Tarjeta"],
@@ -39,10 +47,12 @@ const saleSchema = new mongoose.Schema({
   },
   advance: {
     type: Number,
+    default: 0,
     min: 0,
     required: false,
   },
   extraCost: {
+    default: 0,
     type: Number,
     min: 0,
     required: false,

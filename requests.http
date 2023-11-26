@@ -85,3 +85,6 @@ Content-Type: application/json
 
 ###
 GET http://localhost:3000/product/barcode/3410175721
+
+###
+GET http://localhost:3000/sale

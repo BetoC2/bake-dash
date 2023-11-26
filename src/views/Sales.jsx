@@ -272,22 +272,29 @@ export default function Sales() {
   const [advance, setAdvance] = useState('');
   const [extraCost, setExtraCost] = useState('');
   const [comments, setComments] = useState('');
-  // ... otros estados para los valores del formulario
+  const sesion = JSON.parse(sessionStorage.getItem('sesion'));
 
-  // Funciones para actualizar el estado cuando los valores cambian en los inputs
+
   const handlePaymentMethodChange = (event) => {
     setPaymentMethod(event.target.value);
   };
 
   const handleAdvanceChange = (event) => {
-    const value = parseFloat(event.target.value);
-    setAdvance(isNaN(value) ? 0 : value); // Ensure it's a number or default to 0
+    let value = event.target.value;
+    
+    value = value === null || value === undefined ? 0 : value.trim();
+  
+    setAdvance(value === null ? 0 : parseFloat(value));
   };
   
   const handleExtraCostChange = (event) => {
-    const value = parseFloat(event.target.value);
-    setExtraCost(isNaN(value) ? 0 : value); // Ensure it's a number or default to 0
+    let value = event.target.value;
+  
+    value = value === null || value === undefined ? 0 : value.trim();
+  
+    setExtraCost(value === null ? 0 : parseFloat(value)); // Establecer en 0 si está vacío, de lo contrario, convertir a flotante
   };
+  
 
   const handleCommentsChange = (event) => {
     setComments(event.target.value);
@@ -301,13 +308,20 @@ export default function Sales() {
   };
   
   const calculateTotal = () => {
-    const productsTotal = calculateSubtotal(); // Reuse the subtotal calculation
+    const productsTotal = calculateSubtotal(); 
     const total = productsTotal + extraCost - advance;
     return total;
   };
 
 
   const handleCreateSubmit = async () => {
+    const validationResult = validateFields();
+
+    if (!validationResult.valid) {
+      alert(validationResult.message);
+      return;
+    }
+  
     const saleData = {
       products: products.map(product => ({
         barcode: product.barcode,
@@ -315,7 +329,10 @@ export default function Sales() {
         quantity: product.quantity,
         price: product.price
       })),
-      vendor: "Nombre del vendedor", // You might replace this with actual vendor data
+      vendor: {
+        id: sesion.id, 
+        name: sesion.name
+      },
       paymentMethod: paymentMethod,
       advance: advance,
       extraCost: extraCost,
@@ -326,39 +343,104 @@ export default function Sales() {
     console.log(saleData);
   
     try {
-      const response = await fetch('http://localhost:3000/sale/', {
+      response = await fetch('http://localhost:3000/sale/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(saleData),
       });
-  
+
       if (!response.ok) {
         throw new Error('Error al enviar la solicitud');
       }
-  
+
       const responseData = await response.json();
       console.log('Venta creada exitosamente:', responseData);
-  
-      // Resetting form fields
-      setProducts([]);
-      setPaymentMethod('');
-      setAdvance('');
-      setExtraCost('');
-      setComments('');
-  
+
+      clearFields();
+
       alert('Venta creada exitosamente');
-      // Redirect or show a success message as needed
-    } catch (error) {
-      console.error('Error al crear la venta:', error);
-      alert('Error al crear la venta. Por favor, inténtalo de nuevo');
+    } finally {
+      if (response && !response.ok) {
+        console.error('Error al crear la venta');
+        alert('Error al crear la venta. Por favor, inténtalo de nuevo');
+      }
     }
   };
   
+  const validateFields = () => {
+    if (products.length === 0) {
+      return {
+        valid: false,
+        message: 'No hay productos en la venta. Agrega al menos un producto para realizar la venta.',
+      };
+    }
 
+    if (!sesion || !sesion.id || !sesion.name) {
+      return {
+        valid: false,
+        message: 'No se pudo identificar al vendedor. Por favor, inicia sesión nuevamente.',
+      };
+    }
 
+    if (!paymentMethod) {
+      return {
+        valid: false,
+        message: 'El método de pago no es válido. Selecciona un método de pago para continuar.',
+      };
+    }
 
+    return { valid: true };
+  };
+  
+  const clearFields = () => {
+    setProducts([]);
+    setPaymentMethod('');
+    setAdvance('');
+    setExtraCost('');
+    setComments('');
+  };
+
+  const [sales, setSales] = useState([]);
+
+  const fetchSalesData = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/sale');
+      if (response.ok) {
+        const responseData = await response.json();
+        const salesData = responseData.sales; // Accediendo a la propiedad 'sales' del objeto
+        setSales(salesData);
+      } else {
+        throw new Error('Error al obtener los datos de ventas');
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
+  useEffect(() => {
+    fetchSalesData();
+  }, []);
+  
+  //Format Date Time
+  const formatDateTime = dateTimeString => {
+    const dateTime = new Date(dateTimeString);
+    const formattedDate = `${addZero(dateTime.getDate())}/${addZero(
+      dateTime.getMonth() + 1
+    )}/${dateTime.getFullYear()}`;
+    const formattedTime = `${addZero(dateTime.getHours())}:${addZero(
+      dateTime.getMinutes()
+    )}`;
+  
+    return `${formattedDate} ${formattedTime}`;
+  };
+  
+  const addZero = value => {
+    return value < 10 ? `0${value}` : value;
+  };
+  
+  
 
   return (
     <>
@@ -545,28 +627,29 @@ export default function Sales() {
                 >
                   <tr className={`${isMobile ? "m-2" : "p-4"}`}>
                     <th></th>
-                    <th>Fecha</th>
+                    <th>Fecha & Hora</th>
                     {isMobile && <th></th>}
-                    <th>Valor</th>
+                    <th>Total</th>
                     <th>Vendedor</th>
                     <th>Método</th>
                     {!isMobile && <th></th>}
                   </tr>
                 </thead>
                 <tbody className="font-semibold">
-                  {data.map((item, index) => (
+                  {sales.filter(sale => sale.vendor[0].id === sesion.id) // Filtrar las ventas por el nombre del vendedor
+                        .map((sale, index)=> (
                     <tr key={index} className="p-1">
                       <td
                         className={`${isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2"
                           }`}
                       >
-                        {item.id}
+                        {sale._id}
                       </td>
                       <td
                         className={`${isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2"
                           }`}
                       >
-                        {item.date}
+                        {formatDateTime(sale.datetime)}
                       </td>
                       {isMobile && (
                         <td
@@ -582,19 +665,19 @@ export default function Sales() {
                         className={`${isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2"
                           }`}
                       >
-                        {item.value}
+                        ${sale.total}
                       </td>
                       <td
                         className={`${isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2"
                           }`}
                       >
-                        {item.vendor}
+                        {sale.vendor[0].name}
                       </td>
                       <td
                         className={`${isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2"
                           }`}
                       >
-                        {item.method}
+                        {sale.paymentMethod}
                       </td>
                       {!isMobile && (
                         <td className="pt-2 pr-4">
