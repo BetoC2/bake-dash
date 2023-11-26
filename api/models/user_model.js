@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema({
   },
   employment: {
     type: String,
-    enum: ["Vendedor", "Repartidor", "Almacén"],
+    enum: ["Vendedor", "Repartidor", "Almacen"],
     required: true,
   },
   phone: {

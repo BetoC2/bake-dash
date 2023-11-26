@@ -7,164 +7,20 @@ import { IoChevronBack, IoChevronForward, IoTrashBin } from "react-icons/io5";
 import { FaSearch, FaEye } from "react-icons/fa";
 import { RiAddLine, RiArrowUpLine, RiArrowDownLine, RiDeleteBinLine } from 'react-icons/ri';
 
-const data = [
-  {
-    id: "01",
-    date: "19:51 10/01/2023",
-    value: "$223.00",
-    vendor: "Luis",
-    method: "Efectivo",
-  },
-  {
-    id: "02",
-    date: "09:23 11/01/2023",
-    value: "$98.50",
-    vendor: "Maria",
-    method: "Tarjeta",
-  },
-  {
-    id: "03",
-    date: "14:12 12/01/2023",
-    value: "$500.25",
-    vendor: "Juan",
-    method: "Transferencia",
-  },
-  {
-    id: "04",
-    date: "08:30 13/01/2023",
-    value: "$75.60",
-    vendor: "Ana",
-    method: "Efectivo",
-  },
-  {
-    id: "05",
-    date: "17:45 14/01/2023",
-    value: "$123.75",
-    vendor: "Pedro",
-    method: "Tarjeta",
-  },
-  {
-    id: "06",
-    date: "12:20 15/01/2023",
-    value: "$340.00",
-    vendor: "Carla",
-    method: "Transferencia",
-  },
-  {
-    id: "07",
-    date: "20:05 16/01/2023",
-    value: "$200.00",
-    vendor: "Sofia",
-    method: "Efectivo",
-  },
-  {
-    id: "08",
-    date: "10:55 17/01/2023",
-    value: "$88.20",
-    vendor: "Pablo",
-    method: "Tarjeta",
-  },
-  {
-    id: "09",
-    date: "15:40 18/01/2023",
-    value: "$430.90",
-    vendor: "Elena",
-    method: "Transferencia",
-  },
-  {
-    id: "10",
-    date: "11:11 19/01/2023",
-    value: "$50.00",
-    vendor: "Martina",
-    method: "Efectivo",
-  },
-  {
-    id: "01",
-    date: "19:51 10/01/2023",
-    value: "$223.00",
-    vendor: "Luis",
-    method: "Efectivo",
-  },
-  {
-    id: "02",
-    date: "09:23 11/01/2023",
-    value: "$98.50",
-    vendor: "Maria",
-    method: "Tarjeta",
-  },
-  {
-    id: "03",
-    date: "14:12 12/01/2023",
-    value: "$500.25",
-    vendor: "Juan",
-    method: "Transferencia",
-  },
-  {
-    id: "04",
-    date: "08:30 13/01/2023",
-    value: "$75.60",
-    vendor: "Ana",
-    method: "Efectivo",
-  },
-  {
-    id: "05",
-    date: "17:45 14/01/2023",
-    value: "$123.75",
-    vendor: "Pedro",
-    method: "Tarjeta",
-  },
-  {
-    id: "06",
-    date: "12:20 15/01/2023",
-    value: "$340.00",
-    vendor: "Carla",
-    method: "Transferencia",
-  },
-  {
-    id: "07",
-    date: "20:05 16/01/2023",
-    value: "$200.00",
-    vendor: "Sofia",
-    method: "Efectivo",
-  },
-  {
-    id: "08",
-    date: "10:55 17/01/2023",
-    value: "$88.20",
-    vendor: "Pablo",
-    method: "Tarjeta",
-  },
-  {
-    id: "09",
-    date: "15:40 18/01/2023",
-    value: "$430.90",
-    vendor: "Elena",
-    method: "Transferencia",
-  },
-  {
-    id: "10",
-    date: "11:11 19/01/2023",
-    value: "$50.00",
-    vendor: "Martina",
-    method: "Efectivo",
-  },
-];
-
 const inputClasses =
   "w-full bg-[#E6E6E6] border-0 rounded-md p-[6px] focus:outline-none focus:border-[#222222] focus:border-2";
 
 export default function Sales() {
   const [products, setProducts] = useState([]);
   const [inputIdValue, setInputIdValue] = useState('');
-  const [currentPage, setCurrentPage] = useState("Usuarios");
+  const [currentPage, setCurrentPage] = useState("Ventas");
+  useEffect(() => {
+    setCurrentPage("Ventas");
+  }, []);
 
   useEffect(() => {
     console.log(products);
   }, [products]);
-
-  useEffect(() => {
-    setCurrentPage("Usuarios");
-  }, []);
 
   // Responsive openning
   const [isMobile, setIsMobile] = useState(false);
@@ -318,8 +174,8 @@ export default function Sales() {
     const validationResult = validateFields();
 
     if (!validationResult.valid) {
+
       alert(validationResult.message);
-      return;
     }
 
     const saleData = {
@@ -440,6 +296,19 @@ export default function Sales() {
     return value < 10 ? `0${value}` : value;
   };
 
+
+  // Addtional method to display sales
+  // Función de filtrado basada en el tipo de usuario
+  const filteredSales = sesion && sesion.employment !== "Admin"
+    ? sales.filter(sale => sale.vendor[0].id === sesion.id)
+    : sales;
+
+  // Ordenar ventas filtradas por fecha
+  const sortedSales = filteredSales.slice().sort((a, b) => {
+    const dateA = new Date(a.datetime).getTime();
+    const dateB = new Date(b.datetime).getTime();
+    return dateB - dateA;
+  });
 
 
   return (
@@ -577,11 +446,12 @@ export default function Sales() {
         className="pl-8 pr-8"
       >
         {/* Parte del boton modal y la barra de búsqueda */}
-        <div className="flex flex-col h-[100%] p-2">
+        <div className="flex flex-col h-[100%] p-2 justify-center">
           <ToolsSection
             className={`${isMobile ? "mt-[8vh] h-[20vh]" : "h-[32vh]"}`}
           >
-            <UserButton
+             <h1 className="text-4xl mb-8">Ventas</h1>
+            {/* <UserButton
               className={`p-4 ${isMobile ? "w-[100%]" : ""}`}
               onClick={() => setModalState(!modalState)}
             >
@@ -594,7 +464,15 @@ export default function Sales() {
               >
                 Nueva venta
               </p>
-            </UserButton>
+            </UserButton> */}
+            <button
+              className="flex items-center bg-main-dark text-main-white py-2 px-4 rounded-xl mb-8 text-xl lg:text-lg xl:text-lg "
+              onClick={() => {
+                setModalState(!modalState);
+              }}
+            >
+              Nueva Venta
+            </button>
             <br />
             <SearchBar>
               <div className="relative w-full">
@@ -636,64 +514,57 @@ export default function Sales() {
                   </tr>
                 </thead>
                 <tbody className="font-semibold">
-                  {sales
-                    .filter(sale => sale.vendor[0].id === sesion.id) 
-                    .sort((a, b) => {
-                      const dateA = new Date(a.datetime).getTime();
-                      const dateB = new Date(b.datetime).getTime();
-                      return dateB - dateA;
-                    })
-                    .map((sale, index) => (
-                      <tr key={index} className="p-1">
+                  {sortedSales.map((sale, index) => (
+                    <tr key={index} className="p-1">
+                      <td
+                        className={`${isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2"
+                          }`}
+                      >
+                        {sale._id}
+                      </td>
+                      <td
+                        className={`${isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2"
+                          }`}
+                      >
+                        {formatDateTime(sale.datetime)}
+                      </td>
+                      {isMobile && (
                         <td
-                          className={`${isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2"
+                          className={`${isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2 pr-4"
                             }`}
                         >
-                          {sale._id}
+                          <button className="bg-[#E0D9F2] pt-[3] pb-[3] pl-2 pr-2 rounded-xl">
+                            <FaEye />
+                          </button>
                         </td>
-                        <td
-                          className={`${isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2"
-                            }`}
-                        >
-                          {formatDateTime(sale.datetime)}
+                      )}
+                      <td
+                        className={`${isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2"
+                          }`}
+                      >
+                        ${sale.total}
+                      </td>
+                      <td
+                        className={`${isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2"
+                          }`}
+                      >
+                        {sale.vendor[0].name}
+                      </td>
+                      <td
+                        className={`${isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2"
+                          }`}
+                      >
+                        {sale.paymentMethod}
+                      </td>
+                      {!isMobile && (
+                        <td className="pt-2 pr-4">
+                          <button className="bg-[#E0D9F2] pt-[3] pb-[3] pl-2 pr-2 rounded-xl">
+                            <FaEye />
+                          </button>
                         </td>
-                        {isMobile && (
-                          <td
-                            className={`${isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2 pr-4"
-                              }`}
-                          >
-                            <button className="bg-[#E0D9F2] pt-[3] pb-[3] pl-2 pr-2 rounded-xl">
-                              <FaEye />
-                            </button>
-                          </td>
-                        )}
-                        <td
-                          className={`${isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2"
-                            }`}
-                        >
-                          ${sale.total}
-                        </td>
-                        <td
-                          className={`${isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2"
-                            }`}
-                        >
-                          {sale.vendor[0].name}
-                        </td>
-                        <td
-                          className={`${isMobile ? "pl-4 pr-4 pt-3 pb-3" : "p-2"
-                            }`}
-                        >
-                          {sale.paymentMethod}
-                        </td>
-                        {!isMobile && (
-                          <td className="pt-2 pr-4">
-                            <button className="bg-[#E0D9F2] pt-[3] pb-[3] pl-2 pr-2 rounded-xl">
-                              <FaEye />
-                            </button>
-                          </td>
-                        )}
-                      </tr>
-                    ))}
+                      )}
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>

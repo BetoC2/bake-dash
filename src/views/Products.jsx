@@ -402,7 +402,6 @@ function Products() {
               setCreateModal(true);
             }}
           >
-            {/* <FaPlus className="mr-2" /> */}
             Nuevo Producto
           </button>
           <div className="relative w-3/4">
@@ -424,7 +423,7 @@ function Products() {
           {products.map((item) => (
             <div
               key={item._id}
-              className="w-full h-52 rounded-3xl flex flex-col items-center justify-center"
+              className="w-full h-52 rounded-3xl flex flex-col items-center justify-center cursor-pointer mt-8"
             >
               <img
                 src={item.imageURL}
@@ -432,7 +431,7 @@ function Products() {
                 className="object-contain w-full h-3/4 rounded-xl"
                 onClick={() => handleEditModal(item._id)}
               />
-              <p className="text-center mt-2 text-sm ">{item.name}</p>
+              <p className="text-center mt-2 text-2xl">{item.name}</p>
             </div>
           ))}
         </div>

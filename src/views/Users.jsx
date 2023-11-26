@@ -464,13 +464,13 @@ export default function Users() {
         currentPage={currentPage}
         className="pl-8 pr-8"
       >
-        <h1 className="text-4xl mb-8">Usuarios</h1>
         {/* Parte del boton modal y la barra de búsqueda */}
-        <div className="flex flex-col h-[100%] p-2">
+        <div className="flex flex-col h-[100%] p-2 justify-center">
           <ToolsSection
             className={`${isMobile ? "mt-[8vh] h-[20vh]" : "h-[32vh]"}`}
           >
-            <UserButton
+            <h1 className="text-4xl mb-8">Usuarios</h1>
+            {/* <UserButton
               className={`p-4 ${isMobile ? "w-[100%]" : ""}`}
               onClick={() => setModalState(!modalState)}
             >
@@ -484,7 +484,15 @@ export default function Users() {
               >
                 Nuevo Usuario
               </p>
-            </UserButton>
+            </UserButton> */}
+            <button
+            className="flex items-center bg-main-dark text-main-white py-2 px-4 rounded-xl mb-8 text-xl lg:text-lg xl:text-lg "
+            onClick={() => {
+              setModalState(!modalState);
+            }}
+          >
+            Nuevo Usuario
+          </button>
             <br />
             <SearchBar>
               <div className="relative w-full">
