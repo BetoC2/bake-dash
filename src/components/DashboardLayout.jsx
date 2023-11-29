@@ -95,6 +95,7 @@ function DashboardLayout({ children, currentPage }) {
 
   const logout = () => {
     sessionStorage.removeItem("sesion");
+    alert("Sesión cerrada");
     navigate("/login");
   };
 
