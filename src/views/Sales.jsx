@@ -428,7 +428,7 @@ export default function Sales() {
             <p className="mb-1">Descuento ($)</p>
             <input
               className={inputClasses}
-              type="text"
+              type="number"
               id="AnticipoInput"
               name="anticipo"
               value={advance}
@@ -439,7 +439,7 @@ export default function Sales() {
             <p className="mb-1">Costo extra ($)</p>
             <input
               className={inputClasses}
-              type="text"
+              type="number"
               id="costoExtraInput"
               name="costoExtra"
               value={extraCost}
