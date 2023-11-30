@@ -5,6 +5,33 @@ import { CiCirclePlus } from "react-icons/ci";
 import { Modal } from "../components";
 import { removeProduct } from "../../api/controllers/product_controller";
 import { set } from "mongoose";
+import Loader from './Loader'; // Importa tu componente Loader
+
+const ImageWithLoader = ({ imageURL }) => {
+  const [loading, setLoading] = useState(true);
+
+  const handleImageLoad = () => {
+    setLoading(false);
+  };
+
+  return (
+    <div className="relative">
+      {loading && <Loader />} {/* Muestra el loader mientras la imagen carga */}
+      <img
+        src={imageURL}
+        alt="Producto"
+        className={`object-contain w-full h-3/4 rounded-xl ${loading ? 'hidden' : 'block'}`}
+        onLoad={handleImageLoad}
+      />
+    </div>
+  );
+};
+
+// Luego, en tu formulario, reemplaza el input de imagen por este componente
+<div className="p-1 mb-3">
+  <p className="mb-1">Imagen del producto</p>
+  <ImageWithLoader imageURL={editProduct.imageURL} />
+</div>
 
 const inputClasses =
   "w-full bg-[#E6E6E6] border-0 rounded-md p-[6px] focus:outline-none focus:border-[#222222] focus:border-2";
