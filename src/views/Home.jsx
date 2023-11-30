@@ -13,6 +13,10 @@ function Home() {
         const responseData = await response.json();
         const salesData = responseData.sales; // Accediendo a la propiedad 'sales' del objeto
         setSales(salesData);
+        const totalMoney = salesData.reduce((accumulator, sale) => {
+          return accumulator + sale.total;
+        }, 0);
+        setMoney(totalMoney);
       } else {
         throw new Error("Error al obtener los datos de ventas");
       }
@@ -21,16 +25,8 @@ function Home() {
     }
   };
 
-  const getTotalMoney = async () => {
-    const totalMoney = sales.reduce((accumulator, sale) => {
-      return accumulator + sale.total;
-    }, 0);
-    setMoney(totalMoney);
-  };
-
   useEffect(() => {
     fetchSalesData();
-    getTotalMoney();
   }, []);
 
   useEffect(() => {
