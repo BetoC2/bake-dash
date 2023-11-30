@@ -2,14 +2,18 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import brandLogo from "../assets/img/bmagallanes_logo.png";
 import bgImage from "../assets/img/login_bg.webp";
+import Loader from "./Loader"; 
 
 function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false); 
 
   const handleLoginClick = async (event) => {
     event.preventDefault();
+
+    setLoading(true); 
 
     const data = {
       email: email,
@@ -22,6 +26,7 @@ function Login() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
+        
       });
 
       if (response.ok) {
@@ -34,12 +39,15 @@ function Login() {
       }
     } catch (err) {
       console.log(err);
+    } finally {
+      setLoading(false); 
     }
   };
 
   return (
     <div className="flex h-screen">
       <div className="w-full md:w-1/2 flex items-center justify-center relative">
+        {loading && <Loader />} {/* Mostrar el Loader si 'loading' es true */}
         <img
           src={brandLogo}
           alt="Logo"
@@ -54,7 +62,7 @@ function Login() {
                 id="email"
                 placeholder="Correo"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)} // Actualizar el estado 'username' al cambiar el valor
+                onChange={(e) => setEmail(e.target.value)}
                 className="bg-gray-200 w-full rounded-md p-2 outline-none"
               />
             </div>
@@ -64,15 +72,14 @@ function Login() {
                 id="password"
                 placeholder="Contraseña"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)} // Actualizar el estado 'password' al cambiar el valor
+                onChange={(e) => setPassword(e.target.value)}
                 className="w-full bg-gray-200 rounded-md p-2 outline-none"
               />
             </div>
-            {/* ... Otros elementos del formulario ... */}
             <button
               type="submit"
               className="bg-black text-white py-2 px-4 rounded-md w-full"
-              onClick={handleLoginClick} // Agregar el evento onClick aquí
+              onClick={handleLoginClick}
             >
               Ingresar
             </button>
